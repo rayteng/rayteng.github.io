@@ -28,8 +28,8 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
 .main{flex:1;display:flex;flex-direction:column;min-width:0}
 .top{height:66px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:12px;padding:0 26px;flex:none}
 .ptitle{font-size:23px;font-weight:700}
-.kbd{display:flex;align-items:center;gap:6px;height:34px;padding:0 11px;background:var(--card);border:1px solid var(--bd);border-radius:9px;color:var(--dim);font-size:12px}
-.coins{display:flex;align-items:center;gap:6px;height:34px;padding:0 12px;background:var(--ambt);border:1px solid rgba(249,177,4,.3);border-radius:9px;color:var(--amber);font-size:13px;font-weight:700}
+.kbd{display:flex;align-items:center;gap:6px;height:34px;padding:0 11px;background:var(--card);border:1px solid var(--bd);border-radius:9px;color:var(--dim);font-size:12px;cursor:pointer}
+.streak{display:flex;align-items:center;gap:6px;height:34px;padding:0 12px;background:var(--tealt);border:1px solid rgba(0,186,167,.3);border-radius:9px;color:var(--teal2);font-size:12.5px;font-weight:600}
 .lang{display:flex;align-items:center;gap:6px;height:34px;padding:0 11px;background:var(--card);border:1px solid var(--bd);border-radius:9px;color:var(--mut);font-size:12.5px;cursor:pointer}
 .acc{width:34px;height:34px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px}
 .scroll{flex:1;overflow-y:auto;padding:26px}
@@ -43,9 +43,8 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
 .btn:hover{background:var(--card2)}
 .btn.teal{background:var(--teal);border:none;color:#03251f}.btn.teal:hover{background:var(--teal2)}
 .btn.tout{background:transparent;border:1px solid rgba(0,186,167,.4);color:var(--teal2)}.btn.tout:hover{background:var(--tealt)}
-.btn.aout{background:transparent;border:1px solid rgba(249,177,4,.4);color:var(--amber)}.btn.aout:hover{background:var(--ambt)}
 .btn.wa{background:var(--wa);border:none;color:#053d1c}
-.chip{font-size:12px;padding:5px 11px;border-radius:8px;background:var(--card2);border:1px solid var(--bd);color:var(--mut);display:inline-flex;align-items:center;gap:5px}
+.chip{font-size:12px;padding:5px 11px;border-radius:8px;background:var(--card2);border:1px solid var(--bd);color:var(--mut);display:inline-flex;align-items:center;gap:5px;cursor:pointer}
 .chip.tl{background:var(--tealt);border-color:rgba(0,186,167,.3);color:var(--teal2)}
 .badge{font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600}
 .tile{background:var(--card2);border:1px solid var(--bd);border-radius:13px;padding:14px 16px}
@@ -60,9 +59,9 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
 .seg{display:inline-flex;background:var(--card);border:1px solid var(--bd);border-radius:11px;overflow:hidden}
 .seg button{height:38px;padding:0 16px;border:none;background:transparent;color:var(--mut);font-size:13px;font-family:inherit;cursor:pointer;font-weight:600}
 .seg button.on{background:var(--teal);color:#03251f}
+.seg button:disabled{color:var(--dim);cursor:not-allowed}
 .back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--mut);cursor:pointer;background:none;border:none;font-family:inherit;padding:0;font-weight:600;margin-bottom:14px}
-.copilot{position:fixed;right:24px;bottom:24px;display:flex;align-items:center;gap:8px;height:46px;padding:0 18px;background:var(--purple);color:#fff;border:none;border-radius:999px;font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 8px 30px rgba(139,92,246,.4)}
-.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--teal);color:#03251f;font-size:13px;font-weight:700;padding:11px 18px;border-radius:11px;display:none;align-items:center;gap:8px;z-index:50}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--teal);color:#03251f;font-size:13px;font-weight:700;padding:11px 18px;border-radius:11px;display:none;align-items:center;gap:8px;z-index:50;max-width:80vw}
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -71,98 +70,117 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
 .col{width:210px;flex:none}
 .ccard{background:var(--card);border:1px solid var(--bd);border-radius:13px;padding:12px;margin-bottom:10px;cursor:pointer}
 .ccard:hover{border-color:var(--bd2);background:var(--card2)}
+.cap{font-size:11px;color:var(--amber);background:var(--ambt);border:1px solid rgba(249,177,4,.25);border-radius:7px;padding:3px 8px;display:inline-flex;align-items:center;gap:5px}
+.cap.ok{color:var(--green);background:var(--tealt);border-color:rgba(0,187,127,.25)}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="banner"><i class="ti ti-sparkles"></i>Interactive preview — sample data, no live backend</div>
+  <div class="banner"><i class="ti ti-sparkles"></i>Interactive preview — sample data, no live backend · features per the Yoseh product plan</div>
   <div class="shell">
     <aside class="side">
       <div class="logo"><div class="lmark">Y</div><div><div style="font-weight:800;font-size:16px">Yoseh</div><div style="font-size:10.5px;color:var(--dim)">TalentBridge</div></div></div>
-      <div class="nav on" data-sec="dashboard" onclick="go('dashboard','Dashboard')"><i class="ti ti-layout-dashboard"></i>Dashboard</div>
+      <div class="nav on" data-sec="today" onclick="go('today','Today')"><i class="ti ti-checklist"></i>Today<span class="bdg">3</span></div>
+      <div class="nav" data-sec="inbox" onclick="go('inbox','Inbox & Replies')"><i class="ti ti-message-circle"></i>Inbox</div>
+      <div class="nav" data-sec="talent" onclick="go('talent','Talent Pool')"><i class="ti ti-database"></i>Talent Pool</div>
+      <div class="nav" data-sec="search" onclick="go('search','Search')"><i class="ti ti-search"></i>Search</div>
+      <div class="nav" data-sec="pipelines" onclick="go('pipelines','Pipeline')"><i class="ti ti-layout-kanban"></i>Pipeline</div>
+      <div class="nlabel">You</div>
       <div class="nav" data-sec="profile" onclick="go('profile','My Public Profile')"><i class="ti ti-star"></i>My Public Profile</div>
-      <div class="nav" data-sec="talent" onclick="go('talent','My Talent Pool')"><i class="ti ti-database"></i>My Talent Pool</div>
-      <div class="nav" data-sec="pipelines" onclick="go('pipelines','My Pipeline')"><i class="ti ti-users"></i>My Pipeline</div>
-      <div class="nav" data-sec="chat" onclick="go('chat','Chat')"><i class="ti ti-message-circle"></i>Chat<span class="bdg">3</span></div>
-      <div class="nav" data-sec="calendar" onclick="go('calendar','Calendar')"><i class="ti ti-calendar"></i>Calendar</div>
-      <div class="nav" data-sec="coworkers" onclick="go('coworkers','Co-Workers')"><i class="ti ti-users-group"></i>Co-Workers</div>
-      <div class="nav" data-sec="coins" onclick="go('coins','Earn Coins')"><i class="ti ti-coin"></i>Earn Coins</div>
-      <div class="nlabel">More</div>
-      <div class="nav" data-sec="ai" onclick="go('ai','AI Resume Generator')"><i class="ti ti-sparkles"></i>AI Resume</div>
       <div class="nav" data-sec="settings" onclick="go('settings','Settings')"><i class="ti ti-settings"></i>Settings</div>
       <div style="flex:1"></div>
       <div class="suser"><div class="av" style="width:34px;height:34px;background:var(--purple);color:#fff;font-size:12px">AR</div><div style="min-width:0"><div style="font-size:13px;font-weight:600">Aisha Rahman</div><div style="font-size:11px;color:var(--dim)">Recruiter · TalentBridge</div></div></div>
     </aside>
     <div class="main">
       <div class="top">
-        <div class="ptitle" id="ptitle">Dashboard</div>
+        <div class="ptitle" id="ptitle">Today</div>
         <div style="flex:1"></div>
-        <div class="kbd"><i class="ti ti-command" style="font-size:13px"></i>K</div>
-        <div class="coins"><i class="ti ti-coin" style="font-size:15px"></i><span id="coins">1,240</span></div>
-        <div class="lang"><span style="font-weight:700;font-size:11px">GB</span> EN <i class="ti ti-chevron-down" style="font-size:13px"></i></div>
+        <div class="kbd" onclick="toast('Command palette — jump to anything')"><i class="ti ti-command" style="font-size:13px"></i>K</div>
+        <div class="streak" title="Outcome-logging streak"><i class="ti ti-flame" style="font-size:14px"></i><span id="streak">4</span>-day streak</div>
+        <div class="lang"><span style="font-weight:700;font-size:11px">MY</span> EN <i class="ti ti-chevron-down" style="font-size:13px"></i></div>
         <div class="acc">AR</div>
       </div>
       <div class="scroll">
 
-        <section class="view on" id="v-dashboard" data-sec="dashboard">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
-            <div><div class="h1">Good evening, Aisha 👋</div><div class="muted" style="margin-top:4px">Here's your recruiting snapshot for today.</div></div>
-            <div style="display:flex;gap:10px"><button class="btn tout" onclick="go('talent','My Talent Pool');toast('Upload resumes')"><i class="ti ti-upload"></i>Upload Resumes</button><button class="btn aout" onclick="go('calendar','Calendar');toast('Schedule interview')"><i class="ti ti-calendar-plus"></i>Schedule Interview</button></div>
+        <section class="view on" id="v-today" data-sec="today">
+          <div class="h1">Good evening, Aisha 👋</div>
+          <div class="muted" style="margin-top:4px">Here's your daily queue and capture snapshot.</div>
+          <div class="grid4" style="margin-top:18px">
+            <div class="card" style="padding:16px"><div class="dim" style="font-size:11.5px">Outcome capture rate</div><div style="font-size:26px;font-weight:800;margin-top:3px;color:var(--teal2)">52%</div><div class="dim" style="font-size:11px">target ≥50% composite</div></div>
+            <div class="card" style="padding:16px"><div class="dim" style="font-size:11.5px">Verified-outcome share</div><div style="font-size:26px;font-weight:800;margin-top:3px">68%</div><div class="dim" style="font-size:11px">moat v2 quality</div></div>
+            <div class="card" style="padding:16px"><div class="dim" style="font-size:11.5px">Prompt response</div><div style="font-size:26px;font-weight:800;margin-top:3px">41%</div><div class="dim" style="font-size:11px">target ≥40%</div></div>
+            <div class="card" style="padding:16px;cursor:pointer" onclick="go('pipelines','Pipeline')"><div class="dim" style="font-size:11.5px">Active roles</div><div style="font-size:26px;font-weight:800;margin-top:3px">6</div><div class="dim" style="font-size:11px">3 pipelines</div></div>
           </div>
-          <div class="card" style="margin-top:20px">
-            <div style="display:flex;align-items:center;gap:9px"><i class="ti ti-gauge" style="color:var(--teal2);font-size:20px"></i><div class="h2">Your Coordination Velocity</div></div>
-            <div style="display:flex;align-items:baseline;gap:8px;margin-top:14px"><span style="font-size:42px;font-weight:800;color:var(--teal2);line-height:1">1.8</span><span class="muted" style="font-size:16px">x faster</span></div>
-            <div class="dim" style="font-size:12.5px;margin-top:4px"><i class="ti ti-trending-up" style="vertical-align:-2px"></i> Avg time-to-fill: 19.0 days · SEA benchmark: 34 days</div>
-            <div class="grid2" style="margin-top:16px">
-              <div class="tile"><div class="tlabel">Placed this month</div><div class="tnum">3</div></div>
-              <div class="tile"><div class="tlabel">Placed this year</div><div class="tnum">17</div></div>
-              <div class="tile"><div class="tlabel">Active roles</div><div class="tnum">6</div></div>
-              <div class="tile"><div class="tlabel"><i class="ti ti-clock" style="font-size:12px;vertical-align:-1px"></i> Batons in flight</div><div class="tnum">4</div></div>
-            </div>
-            <div style="display:flex;align-items:center;gap:9px;margin-top:14px;background:var(--redt);border:1px solid rgba(251,44,54,.3);border-radius:11px;padding:11px 14px;color:var(--red);font-size:13px;font-weight:600"><i class="ti ti-alert-circle"></i>1 Baton overdue<span class="dim" style="font-weight:400;margin-left:4px">— Ravi Kumar, no reply in 8 days</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:22px 0 12px"><div class="h2">Pending batons <span class="dim" style="font-weight:500;font-size:13px">— who owes a reply today</span></div><span class="dim" style="font-size:12px" id="baton-count">3 to clear</span></div>
+          <div id="batons"></div>
+          <div id="batons-done" style="display:none" class="card"><div style="display:flex;align-items:center;gap:14px"><div style="width:46px;height:46px;border-radius:12px;background:var(--tealt);display:flex;align-items:center;justify-content:center"><i class="ti ti-circle-check" style="color:var(--teal2);font-size:22px"></i></div><div><div class="h2">You're caught up for today</div><div class="muted" style="font-size:13px">That's day <span id="streak2">5</span> of your outcome-logging run. Nice work.</div></div></div></div>
+        </section>
+
+        <section class="view" id="v-inbox" data-sec="inbox">
+          <div class="muted" style="font-size:13px;margin-bottom:12px">WhatsApp & email replies · 3 unread</div>
+          <div id="inboxlist"></div>
+        </section>
+
+        <section class="view" id="v-thread" data-sec="inbox">
+          <button class="back" onclick="go('inbox','Inbox & Replies')"><i class="ti ti-arrow-left"></i>Inbox</button>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><div class="av" id="t-av" style="width:38px;height:38px;background:var(--purple);color:#fff;font-size:13px">AR</div><div><div style="font-weight:700;font-size:15px" id="t-nm">Aisha Rahman</div><div style="font-size:11px;color:var(--wa)"><i class="ti ti-brand-whatsapp"></i> WhatsApp · online</div></div></div>
+          <div class="card" style="padding:14px"><div id="t-msgs" style="display:flex;flex-direction:column;gap:9px;max-height:240px;overflow-y:auto"><div style="display:flex"><div class="bub" style="background:var(--card2)">Hi, open to a sales role in KL?</div></div><div style="display:flex;justify-content:flex-end"><div class="bub" style="background:var(--wa);color:#053d1c">Yes! Tell me more</div></div></div></div>
+          <div style="display:flex;align-items:center;gap:8px;margin:14px 0 8px"><div class="h2" style="font-size:14px">Draft outreach</div><span class="dim" style="font-size:11.5px">— AI-prepared (Claude 3 Haiku) · edit &amp; send in &lt;10s</span></div>
+          <div class="seg" id="ch-seg" style="margin-bottom:10px"><button class="on" onclick="chTab('wa',this)">WhatsApp</button><button onclick="chTab('em',this)">Email</button><button onclick="chTab('im',this)">InMail</button></div>
+          <textarea id="t-in" class="in" style="height:64px;resize:none">Hi Aisha! Here's the role one-pager. Are you free for a quick call this week?</textarea>
+          <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="btn wa" id="t-send" onclick="sendMsg()"><i class="ti ti-send"></i>Send WhatsApp</button></div>
+        </section>
+
+        <section class="view" id="v-talent" data-sec="talent">
+          <div onclick="go('parse','Talent Pool')" style="border:1.5px dashed var(--bd2);border-radius:15px;padding:22px;text-align:center;cursor:pointer;background:var(--card)"><i class="ti ti-cloud-upload" style="font-size:26px;color:var(--teal2)"></i><div style="font-size:14px;font-weight:700;margin-top:7px">Send anything</div><div class="dim" style="font-size:12.5px">Drop a file · paste a screenshot / text / portal URL · or forward via email or WhatsApp — the card builds itself</div></div>
+          <div class="muted" style="font-size:13px;margin:18px 0 10px">1,284 candidates · forward to <span style="font-family:monospace;color:var(--teal2)">talentbridge@in.yoseh.com</span></div>
+          <div id="talentlist"></div>
+        </section>
+
+        <section class="view" id="v-parse" data-sec="talent">
+          <button class="back" onclick="go('talent','Talent Pool')"><i class="ti ti-arrow-left"></i>Talent Pool</button>
+          <div class="muted" style="font-size:12.5px;margin-bottom:12px" id="p-status"><i class="ti ti-loader-2"></i> Reading <span style="font-family:monospace;color:var(--fg)">Lee_CV_2026.pdf</span> … <span class="dim">(Claude 3 Haiku)</span></div>
+          <div class="card">
+            <div id="p-1" style="opacity:.15;transition:opacity .4s;display:flex;align-items:center;gap:13px"><div class="av" style="width:42px;height:42px;background:var(--teal);font-size:15px">LJ</div><div><div style="font-size:16px;font-weight:700">Lee Jun Hao</div><div class="muted" style="font-size:12.5px">Software Engineer</div></div></div>
+            <div id="p-2" style="opacity:.15;transition:opacity .4s;margin-top:13px;font-size:12.5px" class="muted"><i class="ti ti-mail dim"></i> lee.junhao@email.com&nbsp;&nbsp;·&nbsp;&nbsp;<i class="ti ti-phone dim"></i> +60 12-345 6789&nbsp;&nbsp;·&nbsp;&nbsp;<i class="ti ti-map-pin dim"></i> Petaling Jaya</div>
+            <div id="p-3" style="opacity:.15;transition:opacity .4s;margin-top:13px"><div class="dim" style="font-size:11px;font-weight:700;letter-spacing:.05em;margin-bottom:5px">EXPERIENCE · 6 YEARS</div><div style="font-weight:600;font-size:13px">Senior Engineer — Grab · 2022–now</div><div class="muted" style="font-size:12.5px">Engineer — Shopee · 2020–2022</div></div>
+            <div id="p-4" style="opacity:.15;transition:opacity .4s;margin-top:13px"><div class="dim" style="font-size:11px;font-weight:700;letter-spacing:.05em;margin-bottom:6px">SKILLS · canonical-resolved</div><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip tl" onclick="correctSkill(this)">Go</span><span class="chip tl" onclick="correctSkill(this)">React</span><span class="chip tl" onclick="correctSkill(this)">PostgreSQL</span><span class="chip tl" onclick="correctSkill(this)">Mandarin</span></div></div>
           </div>
-          <div class="card" style="margin-top:14px;display:flex;align-items:center;gap:14px">
-            <div style="width:46px;height:46px;border-radius:12px;background:var(--tealt);display:flex;align-items:center;justify-content:center"><i class="ti ti-sparkles" style="color:var(--teal2);font-size:22px"></i></div>
-            <div><div class="h2">All caught up</div><div class="muted" style="font-size:13px">No actions need your attention right now.</div></div>
-          </div>
-          <div class="grid4" style="margin-top:14px">
-            <div class="card" style="padding:16px;cursor:pointer" onclick="go('talent','My Talent Pool')"><div class="dim" style="font-size:12px">Candidates</div><div style="font-size:26px;font-weight:800;margin-top:3px">10</div><div class="dim" style="font-size:11.5px">in talent pool</div></div>
-            <div class="card" style="padding:16px;cursor:pointer" onclick="go('pipelines','My Pipeline')"><div class="dim" style="font-size:12px">Pipelines</div><div style="font-size:26px;font-weight:800;margin-top:3px">3</div><div class="dim" style="font-size:11.5px">9 candidates</div></div>
-            <div class="card" style="padding:16px;cursor:pointer" onclick="go('chat','Chat')"><div class="dim" style="font-size:12px">Active Chats</div><div style="font-size:26px;font-weight:800;margin-top:3px">3</div><div class="dim" style="font-size:11.5px">3 unread</div></div>
-            <div class="card" style="padding:16px;cursor:pointer" onclick="go('calendar','Calendar')"><div class="dim" style="font-size:12px">Today</div><div style="font-size:26px;font-weight:800;margin-top:3px">2</div><div class="dim" style="font-size:11.5px">interviews</div></div>
-          </div>
-          <div class="grid2" style="margin-top:14px;align-items:start">
-            <div class="card" style="padding:18px">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div class="h2">Recently Added</div><span class="dim" style="font-size:12px;cursor:pointer" onclick="go('talent','My Talent Pool')">View all →</span></div>
-              <div id="recent"></div>
-            </div>
-            <div class="card" style="padding:18px">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div class="h2">Pipelines</div><span class="dim" style="font-size:12px;cursor:pointer" onclick="go('pipelines','My Pipeline')">View all →</span></div>
-              <div id="dpipes"></div>
-            </div>
+          <div id="p-done" style="opacity:.15;transition:opacity .4s;margin-top:13px;display:flex;align-items:center;gap:10px"><span class="cap ok"><i class="ti ti-circle-check"></i> 98% captured · 2 fields to confirm</span><span class="dim" style="font-size:11.5px">nothing was silently dropped</span><button class="btn teal" style="margin-left:auto" onclick="toast('Lee Jun Hao saved to pool');go('talent','Talent Pool')">Save to pool</button></div>
+        </section>
+
+        <section class="view" id="v-search" data-sec="search">
+          <div class="muted" style="font-size:13px;margin-bottom:10px">One search bar — type like you're chatting, in any language (BM / EN / 中文 / தமிழ்)</div>
+          <input class="in" id="s-in" value="Cari jurutera Java di KL, 5+ tahun, boleh Mandarin"/>
+          <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="btn teal" onclick="search()"><i class="ti ti-search"></i>Search</button></div>
+          <div id="s-out" style="display:none;margin-top:16px">
+            <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:14px"><span class="dim" style="font-size:11.5px">Understood (canonical):</span><span class="chip tl">jurutera → software_engineer <i class="ti ti-x"></i></span><span class="chip tl">Java <i class="ti ti-x"></i></span><span class="chip tl">KL → kuala_lumpur <i class="ti ti-x"></i></span><span class="chip tl">5+ yrs <i class="ti ti-x"></i></span><span class="chip tl">Mandarin <i class="ti ti-x"></i></span></div>
+            <div class="row" onclick="openCand('Tan Wei Ming','Backend Engineer','Sourced','var(--blue)')"><div class="av" style="width:36px;height:36px;background:var(--blue);color:#fff;font-size:13px">TW</div><div style="flex:1"><div style="font-weight:600">Tan Wei Ming</div><div class="dim" style="font-size:12px">Backend Engineer · 7 yrs · KL · Mandarin</div></div><span class="badge" style="background:var(--tealt);color:var(--green)"><i class="ti ti-check"></i> exact</span></div>
+            <div style="font-size:11px;color:var(--teal2);margin:-4px 0 12px 4px"><i class="ti ti-info-circle"></i> Why a match? structured + lexical + semantic all fired · Java &amp; Mandarin canonical-matched</div>
+            <div class="row" onclick="openCand('Ravi Kumar','DevOps Engineer','Contacted','var(--teal)')"><div class="av" style="width:36px;height:36px;background:var(--teal);font-size:13px">RK</div><div style="flex:1"><div style="font-weight:600">Ravi Kumar</div><div class="dim" style="font-size:12px">DevOps Engineer · 6 yrs · KL</div></div><span class="badge" style="background:var(--card2);color:var(--mut)">~ similar</span></div>
+            <div class="row" onclick="openCand('Mei Ling Chong','Full-Stack Engineer','Sourced','var(--purple)')"><div class="av" style="width:36px;height:36px;background:var(--purple);color:#fff;font-size:13px">ML</div><div style="flex:1"><div style="font-weight:600">Mei Ling Chong</div><div class="dim" style="font-size:12px">Full-Stack Engineer · 5 yrs · PJ · Mandarin</div></div><span class="badge" style="background:var(--card2);color:var(--blue)">↗ semantic</span></div>
           </div>
         </section>
 
         <section class="view" id="v-pipelines" data-sec="pipelines">
-          <div style="display:flex;align-items:center;justify-content:space-between"><div class="muted" style="font-size:13px">3 pipelines</div><button class="btn teal" onclick="toast('New pipeline')"><i class="ti ti-plus"></i>New Pipeline</button></div>
+          <div style="display:flex;align-items:center;justify-content:space-between"><div class="muted" style="font-size:13px">3 pipelines · 7 fixed stages each</div><button class="btn teal" onclick="toast('New pipeline')"><i class="ti ti-plus"></i>New Pipeline</button></div>
           <div class="grid3" style="margin-top:18px" id="pipecards"></div>
         </section>
 
         <section class="view" id="v-board" data-sec="pipelines">
-          <button class="back" onclick="go('pipelines','My Pipeline')"><i class="ti ti-arrow-left"></i>Pipelines</button>
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div style="width:38px;height:38px;border-radius:11px;background:var(--tealt);display:flex;align-items:center;justify-content:center"><i class="ti ti-briefcase" style="color:var(--teal2);font-size:19px"></i></div><div><div class="h2">Senior Backend — Fintech</div><div class="dim" style="font-size:12px">Go + PostgreSQL platform role · 4 candidates</div></div></div>
+          <button class="back" onclick="go('pipelines','Pipeline')"><i class="ti ti-arrow-left"></i>Pipelines</button>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div style="width:38px;height:38px;border-radius:11px;background:var(--tealt);display:flex;align-items:center;justify-content:center"><i class="ti ti-briefcase" style="color:var(--teal2);font-size:19px"></i></div><div><div class="h2">Senior Backend — Fintech</div><div class="dim" style="font-size:12px">Sourced → Contacted → Screened → Submitted → Interview → Offer → Placed</div></div></div>
           <div class="board" id="board"></div>
         </section>
 
         <section class="view" id="v-candidate" data-sec="pipelines">
-          <button class="back" onclick="go('board','My Pipeline')"><i class="ti ti-arrow-left"></i>Board</button>
+          <button class="back" onclick="go('board','Pipeline')"><i class="ti ti-arrow-left"></i>Board</button>
           <div style="display:flex;align-items:center;gap:14px"><div class="av" id="c-av" style="width:52px;height:52px;font-size:18px;background:var(--purple);color:#fff">AR</div><div style="flex:1"><div style="font-size:20px;font-weight:700" id="c-nm">Aisha Rahman</div><div class="muted" id="c-ro">Sales Executive</div></div><span class="badge" id="c-stage" style="background:var(--tealt);color:var(--teal2)">Contacted</span></div>
-          <div style="display:flex;gap:7px;margin-top:14px;flex-wrap:wrap"><span class="chip tl">Negotiation</span><span class="chip tl">B2B Sales</span><span class="chip tl">Mandarin</span><span class="chip">+4 skills</span></div>
-          <div style="display:flex;gap:20px;margin-top:14px;font-size:13px" class="muted"><span><i class="ti ti-mail dim" style="vertical-align:-2px"></i> aisha.r@email.com</span><span><i class="ti ti-map-pin dim" style="vertical-align:-2px"></i> Kuala Lumpur</span><span><i class="ti ti-history dim" style="vertical-align:-2px"></i> via WhatsApp · 14 Mar</span></div>
+          <div style="display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap"><span class="cap ok"><i class="ti ti-circle-check"></i> 98% captured · 2 to confirm</span><span class="dim" style="font-size:12px"><i class="ti ti-history" style="vertical-align:-2px"></i> added by Aisha · via WhatsApp forward · 14 Mar 2026</span></div>
+          <div style="margin-top:14px"><div class="dim" style="font-size:11px;font-weight:700;letter-spacing:.05em;margin-bottom:7px">SKILLS · tap to correct (teaches Yoseh)</div><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip tl" onclick="correctSkill(this)">Negotiation</span><span class="chip tl" onclick="correctSkill(this)">B2B Sales</span><span class="chip tl" onclick="correctSkill(this)">Mandarin</span><span class="chip" onclick="toast('4 more skills')">+4</span></div></div>
           <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
-            <button class="btn teal" onclick="go('ai','AI Resume Generator')"><i class="ti ti-sparkles"></i>Generate resume</button>
-            <button class="btn wa" onclick="openThread('Aisha Rahman','AR','var(--purple)')"><i class="ti ti-brand-whatsapp"></i>Message</button>
-            <button class="btn" onclick="go('calendar','Calendar');toast('Interview scheduled · Fri 3pm')"><i class="ti ti-calendar-plus"></i>Interview</button>
+            <button class="btn wa" onclick="openThread('Aisha Rahman','AR','var(--purple)')"><i class="ti ti-brand-whatsapp"></i>Draft outreach</button>
+            <button class="btn" onclick="toast('WhatsApp QR — scan to connect (the wedge)')"><i class="ti ti-qrcode"></i>WhatsApp QR</button>
             <button class="btn" onclick="moveStage()"><i class="ti ti-arrow-right"></i>Move stage</button>
           </div>
           <div class="card" style="margin-top:18px;padding:16px">
@@ -170,82 +188,20 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
             <div style="display:flex;margin-bottom:7px"><div class="bub" style="background:var(--card2)">Hi, open to a sales role in KL?</div></div>
             <div style="display:flex;justify-content:flex-end"><div class="bub" style="background:var(--wa);color:#053d1c">Yes! Tell me more</div></div>
           </div>
-          <div style="font-size:14px;font-weight:700;margin:20px 0 10px">Did they reply?</div>
+          <div style="font-size:14px;font-weight:700;margin:20px 0 4px">Did they reply? <span class="dim" style="font-weight:500;font-size:12px">· Adakah mereka membalas?</span></div>
+          <div class="dim" style="font-size:11.5px;margin-bottom:10px">3 of 8 captured · building this candidate's track record</div>
           <div style="display:flex;gap:10px;max-width:440px"><button class="btn" style="flex:1;background:var(--green);border:none;color:#042b1d" onclick="outcome(1)">Yes</button><button class="btn" style="flex:1" onclick="outcome(2)">No reply</button><button class="btn" style="flex:1" onclick="outcome(3)">Not yet</button></div>
         </section>
 
-        <section class="view" id="v-talent" data-sec="talent">
-          <div onclick="toast('Drop a CV, screenshot or WhatsApp forward')" style="border:1.5px dashed var(--bd2);border-radius:15px;padding:22px;text-align:center;cursor:pointer;background:var(--card)"><i class="ti ti-cloud-upload" style="font-size:26px;color:var(--teal2)"></i><div style="font-size:14px;font-weight:700;margin-top:7px">Send anything to add a candidate</div><div class="dim" style="font-size:12.5px">Drop a CV · paste a screenshot · forward a WhatsApp — AI parses it in seconds</div></div>
-          <div class="muted" style="font-size:13px;margin:18px 0 10px">10 candidates in your talent pool</div>
-          <div id="talentlist"></div>
-        </section>
-
-        <section class="view" id="v-chat" data-sec="chat">
-          <div style="display:flex;gap:16px;height:calc(100vh - 200px)">
-            <div style="width:340px;flex:none;display:flex;flex-direction:column">
-              <div class="seg" style="margin-bottom:12px"><button class="on">Talents <span style="opacity:.7">3</span></button><button onclick="toast('Coworkers')">Coworkers</button></div>
-              <div class="in" style="display:flex;align-items:center;gap:8px;color:var(--dim);margin-bottom:10px"><i class="ti ti-search"></i>Search names, roles…</div>
-              <div id="chatlist" style="overflow-y:auto"></div>
-            </div>
-            <div class="card" style="flex:1;display:flex;flex-direction:column;padding:0;overflow:hidden">
-              <div id="chat-empty" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px"><div style="width:84px;height:84px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;margin-bottom:14px"><i class="ti ti-message-circle" style="font-size:34px;color:var(--dim)"></i></div><div class="h2">Talents</div><div class="muted" style="font-size:13px;margin-top:5px;max-width:260px">Select a conversation to start chatting</div></div>
-              <div id="chat-conv" style="display:none;flex-direction:column;height:100%">
-                <div style="display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid var(--bd)"><div class="av" id="t-av" style="width:36px;height:36px;background:var(--purple);color:#fff;font-size:13px">AR</div><div><div style="font-weight:700;font-size:14px" id="t-nm">Aisha Rahman</div><div style="font-size:11px;color:var(--wa)"><i class="ti ti-brand-whatsapp"></i> WhatsApp · online</div></div></div>
-                <div id="t-msgs" style="flex:1;padding:18px;display:flex;flex-direction:column;gap:9px;overflow-y:auto"><div style="display:flex"><div class="bub" style="background:var(--card2)">Hi, open to a sales role in KL?</div></div><div style="display:flex;justify-content:flex-end"><div class="bub" style="background:var(--wa);color:#053d1c">Yes! Tell me more</div></div></div>
-                <div style="display:flex;gap:9px;padding:14px 16px;border-top:1px solid var(--bd)"><input class="in" id="t-in" value="Here's the role one-pager. Free for a quick call this week?"/><button class="btn wa" onclick="sendMsg()"><i class="ti ti-send"></i></button></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="view" id="v-ai" data-sec="ai">
-          <div style="display:flex;align-items:center;gap:10px"><div class="h1" style="font-size:22px">AI Resume Generator</div><span class="badge" style="background:var(--tealt);color:var(--teal2)"><i class="ti ti-sparkles" style="vertical-align:-1px"></i> Gemini Flash</span></div>
-          <div class="muted" style="margin-top:4px">Turn a candidate profile into a polished, client-ready resume.</div>
-          <div class="card" style="margin-top:18px;display:flex;align-items:center;gap:13px;padding:16px"><div class="av" style="width:38px;height:38px;background:var(--teal);font-size:13px">LJ</div><div style="flex:1"><div style="font-weight:700">Lee Jun Hao · Software Engineer</div><div class="dim" style="font-size:12.5px">6 yrs · Go, React, PostgreSQL, Mandarin</div></div><button class="btn teal" id="ai-gen" onclick="genResume()"><i class="ti ti-wand"></i>Generate</button></div>
-          <div class="card" style="margin-top:14px;min-height:200px" id="ai-out">
-            <div id="ai-ph" class="dim" style="text-align:center;padding:54px 0;font-size:13px"><i class="ti ti-file-text" style="font-size:30px;display:block;margin-bottom:8px"></i>Your AI-generated resume preview appears here</div>
-            <div id="ai-body" style="display:none">
-              <div style="font-size:20px;font-weight:800">Lee Jun Hao</div><div class="muted" style="margin-bottom:14px">Senior Software Engineer · Petaling Jaya · +60 12-345 6789</div>
-              <div id="ai-1" style="opacity:.15;transition:opacity .4s;margin-bottom:14px;color:var(--mut);line-height:1.6">Results-driven engineer with 6 years building high-scale fintech and e-commerce platforms across Grab and Shopee. Proven record shipping reliable payment systems and mentoring teams.</div>
-              <div id="ai-2" style="opacity:.15;transition:opacity .4s;margin-bottom:14px"><div class="dim" style="font-size:11px;font-weight:700;letter-spacing:.05em;margin-bottom:6px">EXPERIENCE</div><div style="font-weight:600">Senior Engineer — Grab · 2022–now</div><div class="muted" style="font-size:13px">Led payments service handling 2M+ daily transactions; cut latency 40%.</div><div style="font-weight:600;margin-top:8px">Engineer — Shopee · 2020–2022</div><div class="muted" style="font-size:13px">Built checkout microservices for the MY/SG marketplace.</div></div>
-              <div id="ai-3" style="opacity:.15;transition:opacity .4s;display:flex;gap:6px;flex-wrap:wrap"><span class="chip tl">Go</span><span class="chip tl">React</span><span class="chip tl">PostgreSQL</span><span class="chip tl">Kubernetes</span><span class="chip tl">Mandarin</span></div>
-              <div id="ai-4" style="opacity:.15;transition:opacity .4s;display:flex;gap:10px;margin-top:18px;max-width:420px"><button class="btn teal" style="flex:1" onclick="toast('Resume downloaded (PDF)')"><i class="ti ti-download"></i>Download PDF</button><button class="btn" style="flex:1" onclick="toast('Opened in editor')"><i class="ti ti-edit"></i>Customize</button></div>
-            </div>
-          </div>
-        </section>
-
-        <section class="view" id="v-coins" data-sec="coins">
-          <div class="card" style="display:flex;align-items:center;gap:18px;padding:22px">
-            <div style="width:60px;height:60px;border-radius:15px;background:var(--ambt);border:1px solid rgba(249,177,4,.3);display:flex;align-items:center;justify-content:center"><i class="ti ti-coin" style="font-size:30px;color:var(--amber)"></i></div>
-            <div style="flex:1"><div class="dim" style="font-size:12px">Coin balance</div><div style="font-size:32px;font-weight:800;color:var(--amber)" id="coin-bal">1,240</div></div>
-            <button class="btn" onclick="toast('Transaction history')"><i class="ti ti-history"></i>History</button>
-          </div>
-          <div class="grid3" style="margin-top:14px">
-            <div class="card" style="text-align:center;cursor:pointer" onclick="earn(50,'Shared a candidate')"><i class="ti ti-share" style="font-size:24px;color:var(--teal2)"></i><div style="font-weight:700;margin-top:8px">Share &amp; Earn</div><div class="dim" style="font-size:12px">+50 coins</div></div>
-            <div class="card" style="text-align:center;cursor:pointer" onclick="earn(20,'Logged 5 outcomes')"><i class="ti ti-circle-check" style="font-size:24px;color:var(--green)"></i><div style="font-weight:700;margin-top:8px">Log outcomes</div><div class="dim" style="font-size:12px">+20 coins</div></div>
-            <div class="card" style="text-align:center;cursor:pointer" onclick="toast('Redeem coming soon')"><i class="ti ti-gift" style="font-size:24px;color:var(--purple)"></i><div style="font-weight:700;margin-top:8px">Redeem</div><div class="dim" style="font-size:12px">for credits</div></div>
-          </div>
-        </section>
-
-        <section class="view" id="v-calendar" data-sec="calendar">
-          <div class="muted" style="font-size:13px;margin-bottom:14px">2 interviews this week</div>
-          <div class="card" style="border-left:3px solid var(--green);margin-bottom:12px;display:flex;align-items:center;gap:13px;padding:16px"><div class="av" style="width:38px;height:38px;background:var(--red);color:#fff;font-size:13px">NH</div><div style="flex:1"><div style="font-weight:700">Nurul Huda · UX Designer</div><div class="muted" style="font-size:13px"><i class="ti ti-calendar-event" style="vertical-align:-2px"></i> Fri, 3:00 PM · <i class="ti ti-video" style="vertical-align:-2px"></i> Video call</div></div><span class="badge" style="background:var(--tealt);color:var(--green)">Confirmed</span></div>
-          <div class="card" style="border-left:3px solid var(--amber);display:flex;align-items:center;gap:13px;padding:16px"><div class="av" style="width:38px;height:38px;background:var(--teal);font-size:13px">LC</div><div style="flex:1"><div style="font-weight:700">Lim Chee Keong · Project Manager</div><div class="muted" style="font-size:13px"><i class="ti ti-calendar-event" style="vertical-align:-2px"></i> Mon, 11:00 AM · client site</div></div><span class="badge" style="background:var(--ambt);color:var(--amber)">Pending</span></div>
-        </section>
-
-        <section class="view" id="v-coworkers" data-sec="coworkers">
-          <div class="muted" style="font-size:13px;margin-bottom:14px">Your team at TalentBridge · 4 seats</div>
-          <div id="coworkerlist"></div>
-        </section>
-
         <section class="view" id="v-profile" data-sec="profile">
-          <div class="card" style="display:flex;align-items:center;gap:16px"><div class="av" style="width:60px;height:60px;background:var(--purple);color:#fff;font-size:22px">AR</div><div style="flex:1"><div class="h2">Aisha Rahman</div><div class="muted">Senior Recruiter · TalentBridge Recruitment</div><div class="dim" style="font-size:12.5px;margin-top:4px">yoseh.io/aisha-rahman</div></div><button class="btn tout" onclick="toast('Public profile link copied')"><i class="ti ti-link"></i>Copy link</button></div>
-          <div class="grid3" style="margin-top:14px"><div class="tile"><div class="tlabel">Placements</div><div class="tnum">48</div></div><div class="tile"><div class="tlabel">Avg time-to-fill</div><div class="tnum">19d</div></div><div class="tile"><div class="tlabel">Verified outcomes</div><div class="tnum">82%</div></div></div>
+          <div class="card" style="display:flex;align-items:center;gap:16px"><div class="av" style="width:60px;height:60px;background:var(--purple);color:#fff;font-size:22px">AR</div><div style="flex:1"><div class="h2">Aisha Rahman</div><div class="muted">Senior Recruiter · TalentBridge Recruitment</div><div class="dim" style="font-size:12.5px;margin-top:4px">yoseh.io/aisha-rahman · your portable track record</div></div><button class="btn tout" onclick="toast('Public profile link copied')"><i class="ti ti-link"></i>Copy link</button></div>
+          <div class="grid3" style="margin-top:14px"><div class="tile"><div class="tlabel">Placements</div><div class="tnum">48</div></div><div class="tile"><div class="tlabel">Verified-outcome share</div><div class="tnum" style="color:var(--teal2)">68%</div></div><div class="tile"><div class="tlabel">Avg time-to-fill</div><div class="tnum">19d</div></div></div>
+          <div class="card" style="margin-top:14px"><div class="h2" style="font-size:15px;margin-bottom:6px">Why this matters</div><div class="muted" style="font-size:13px;line-height:1.6">Every verified outcome you log builds a portable, recruiter-owned credential — the moat that compounds across agencies (the verified-credential network).</div></div>
         </section>
 
         <section class="view" id="v-settings" data-sec="settings">
-          <div class="card" style="margin-bottom:14px"><div class="h2" style="margin-bottom:12px">Appearance</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">Theme</div><div class="seg" id="st-th"><button class="on" onclick="toast('Dark theme')">Dark</button><button onclick="toast('Light theme')">Light</button><button onclick="toast('Following system')">System</button></div></div>
-          <div class="card" style="margin-bottom:14px"><div class="h2" style="margin-bottom:12px">AI &amp; language</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">AI model</div><div class="seg" id="st-ai" style="margin-bottom:16px"><button class="on" onclick="toast('Gemini Flash selected')">Gemini Flash</button><button onclick="toast('Claude Haiku selected')">Claude Haiku</button></div><div style="font-size:13px;font-weight:600;margin-bottom:8px">Language</div><div class="seg" id="st-lang"><button class="on" onclick="setLang('en',this)">English</button><button onclick="setLang('ms',this)">Bahasa Melayu</button></div><div class="dim" style="font-size:12px;margin-top:8px" id="st-demo">Prompt preview: "Did they reply?"</div></div>
+          <div class="card" style="margin-bottom:14px"><div class="h2" style="margin-bottom:12px">Appearance</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">Theme</div><div class="seg" id="st-th"><button class="on" onclick="toast('Dark theme')">Dark</button><button onclick="toast('Light theme')">Light</button><button onclick="toast('Following system')">System</button></div><div class="dim" style="font-size:11.5px;margin-top:8px">Density: Comfortable / Compact (token multiplier)</div></div>
+          <div class="card" style="margin-bottom:14px"><div class="h2" style="margin-bottom:12px">AI &amp; language</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">Parser &amp; search model</div><div class="seg" id="st-ai" style="margin-bottom:6px"><button class="on" onclick="toast('Claude 3 Haiku — P1 default')">Claude 3 Haiku</button><button disabled title="P2">Gemini Flash · P2</button></div><div class="dim" style="font-size:11px;margin-bottom:16px">In-process Go LLM router (P1) · LiteLLM multi-provider ships P2</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">Language</div><div class="seg" id="st-lang"><button class="on" onclick="setLang('en',this)">English</button><button onclick="setLang('ms',this)">Bahasa Melayu</button></div><div class="dim" style="font-size:12px;margin-top:8px" id="st-demo">Outcome prompt preview: "Did they reply?"</div></div>
           <div class="card" style="display:flex;align-items:center;justify-content:space-between"><div><div class="h2">WhatsApp provider</div><div class="dim" style="font-size:12.5px;margin-top:3px">Connected · TalentBridge Official Business</div></div><span class="dot" style="background:var(--wa);width:11px;height:11px"></span></div>
         </section>
 
@@ -253,50 +209,46 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
     </div>
   </div>
 </div>
-<button class="copilot" onclick="toast('Yoseh Copilot — ask me anything')"><i class="ti ti-sparkles"></i>Yoseh Copilot</button>
 <div class="toast" id="toast"><i class="ti ti-circle-check"></i><span></span></div>
 <script>
 (function(){
   var views={};document.querySelectorAll('.view').forEach(function(v){views[v.id]=v;});
-  var coins=1240,threadName='Aisha Rahman';
-  var pal={AR:'var(--purple)',TW:'var(--blue)',SA:'var(--amber)',RK:'var(--teal)',PN:'var(--green)',LC:'var(--blue)',NH:'var(--red)',LJ:'var(--teal)',MC:'var(--blue)',ML:'var(--purple)'};
+  var streak=4;
+  var pal={AR:'var(--purple)',TW:'var(--blue)',RK:'var(--teal)',PN:'var(--green)',LC:'var(--blue)',NH:'var(--red)',LJ:'var(--teal)',MC:'var(--blue)',ML:'var(--purple)',SR:'var(--purple)'};
   function darkText(c){return (c==='var(--purple)'||c==='var(--red)'||c==='var(--blue)')?'#fff':'#0a0a0a';}
   function ini(n){var p=n.split(' ');return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();}
   function avHTML(n,c,sz){return '<div class="av" style="width:'+sz+'px;height:'+sz+'px;background:'+c+';font-size:'+(sz/2.6)+'px;color:'+darkText(c)+'">'+ini(n)+'</div>';}
-  window.go=function(sec,title){var id='v-'+sec;for(var k in views)views[k].classList.remove('on');if(views[id])views[id].classList.add('on');document.getElementById('ptitle').textContent=title;var hi=(sec==='board'||sec==='candidate')?'pipelines':sec;document.querySelectorAll('.nav').forEach(function(n){n.classList.toggle('on',n.getAttribute('data-sec')===hi);});document.querySelector('.scroll').scrollTop=0;if(sec==='ai')resetGen();};
-  window.toast=function(m){var t=document.getElementById('toast');t.querySelector('span').textContent=m;t.style.display='flex';clearTimeout(t._h);t._h=setTimeout(function(){t.style.display='none';},2200);};
+  window.go=function(sec,title){var id='v-'+sec;for(var k in views)views[k].classList.remove('on');if(views[id])views[id].classList.add('on');document.getElementById('ptitle').textContent=title;var hi=(sec==='board'||sec==='candidate')?'pipelines':(sec==='thread')?'inbox':(sec==='parse')?'talent':sec;document.querySelectorAll('.nav').forEach(function(n){n.classList.toggle('on',n.getAttribute('data-sec')===hi);});document.querySelector('.scroll').scrollTop=0;if(sec==='parse')runParse();};
+  window.toast=function(m){var t=document.getElementById('toast');t.querySelector('span').textContent=m;t.style.display='flex';clearTimeout(t._h);t._h=setTimeout(function(){t.style.display='none';},2400);};
 
-  var recent=[['Max Chew','Data Analyst','Uploaded','2h','var(--blue)'],['Siti Rahman','UX Designer','Chat','6h','var(--purple)'],['Jason Lim','Backend Engineer','Profile','20h','var(--teal)'],['Aina Zulkifli','Marketing Manager','Uploaded','1d','var(--amber)'],['Daniel Tan','Frontend Engineer','Uploaded','1d','var(--green)']];
-  document.getElementById('recent').innerHTML=recent.map(function(r){return '<div style="display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--bd)">'+avHTML(r[0],r[4],30)+'<div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13.5px">'+r[0]+'</div><div class="dim" style="font-size:11.5px">'+r[1]+'</div></div><span class="chip" style="font-size:10.5px">'+r[2]+'</span><span class="dim" style="font-size:11px;width:32px;text-align:right">'+r[3]+'</span></div>';}).join('');
+  var batons=[['Aisha Rahman','AR','Sales Executive · messaged 3 days ago'],['Ravi Kumar','RK','DevOps Engineer · messaged 8 days ago — overdue'],['Siti Rahman','SR','UX Designer · messaged 2 days ago']];
+  window.renderBatons=function(){var box=document.getElementById('batons');box.innerHTML='';document.getElementById('batons-done').style.display=batons.length?'none':'block';document.getElementById('baton-count').textContent=batons.length?batons.length+' to clear':'all clear';batons.forEach(function(b){var col=pal[b[1]]||'var(--teal)';var d=document.createElement('div');d.className='card';d.style.cssText='padding:14px;margin-bottom:10px';d.innerHTML='<div style="display:flex;align-items:center;gap:11px;margin-bottom:11px">'+avHTML(b[0],col,34)+'<div style="flex:1"><div style="font-weight:600;font-size:14px">'+b[0]+'</div><div class="dim" style="font-size:11.5px">'+b[2]+'</div></div><span style="font-size:13px;font-weight:600">Did they reply?</span></div><div style="display:flex;gap:8px"><button class="btn" style="flex:1;height:34px;background:var(--green);border:none;color:#042b1d">Yes</button><button class="btn" style="flex:1;height:34px">No reply</button><button class="btn" style="flex:1;height:34px">Not yet</button></div>';var btns=d.querySelectorAll('button');btns.forEach(function(bt,bi){bt.onclick=function(){if(bi===0){streak++;document.getElementById('streak').textContent=streak;document.getElementById('streak2').textContent=streak;}batons.splice(batons.indexOf(b),1);renderBatons();toast(bi===0?'Logged · streak '+streak:bi===1?'Logged. A non-placement is normal.':'We will ask again tomorrow');};});box.appendChild(d);});};
+  renderBatons();
 
-  var dpipes=[['Senior Backend — Fintech',4,75,'var(--teal)'],['Product Designer',3,55,'var(--purple)'],['Growth Marketing Lead',2,35,'var(--amber)']];
-  document.getElementById('dpipes').innerHTML=dpipes.map(function(p){return '<div style="padding:9px 0;cursor:pointer" onclick="go(\'board\',\'My Pipeline\')"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="font-weight:600">'+p[0]+'</span><span class="dim">'+p[1]+'</span></div><div style="height:6px;border-radius:3px;background:var(--card2)"><div style="height:6px;border-radius:3px;width:'+p[2]+'%;background:'+p[3]+'"></div></div></div>';}).join('');
+  var inbox=[['Siti Rahman','UX Designer','Thanks! I am available for a call Thu…','1h','SR',2],['Ravi Kumar','DevOps Engineer','Can we talk on Thursday?','1h','RK',1],['Mei Ling Chong','Full-Stack Engineer','Noted, looking forward to the next round.','1d','ML',0]];
+  document.getElementById('inboxlist').innerHTML=inbox.map(function(c){var col=pal[c[4]]||'var(--teal)';return '<div class="row" onclick="openThread(\''+c[0]+'\',\''+c[4]+'\',\''+col+'\')">'+avHTML(c[0],col,38)+'<div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span style="font-weight:600">'+c[0]+'</span><span class="dim" style="font-size:11px">'+c[3]+'</span></div><div class="dim" style="font-size:11.5px">'+c[1]+'</div><div class="muted" style="font-size:12.5px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+c[2]+'</div></div>'+(c[5]?'<span class="badge" style="background:var(--teal);color:#03251f;align-self:flex-start">'+c[5]+'</span>':'')+'</div>';}).join('');
 
   var pipes=[['Senior Backend — Fintech','Go + PostgreSQL platform role for a regional fintech','var(--teal)','ti-briefcase',4],['Product Designer','End-to-end product designer for a Series A app','var(--purple)','ti-palette',3],['Growth Marketing Lead','Performance + content marketing for a D2C brand','var(--amber)','ti-trending-up',2]];
-  document.getElementById('pipecards').innerHTML=pipes.map(function(p){return '<div class="card" style="padding:0;overflow:hidden;cursor:pointer" onclick="go(\'board\',\'My Pipeline\')"><div style="height:3px;background:'+p[2]+'"></div><div style="padding:18px"><div style="width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--card2)"><i class="ti '+p[3]+'" style="font-size:21px;color:'+p[2]+'"></i></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px"><div class="h2" style="font-size:16px">'+p[0]+'</div><i class="ti ti-chevron-right dim"></i></div><div class="dim" style="font-size:12.5px;margin-top:4px">'+p[1]+'</div><div style="display:flex;align-items:center;gap:7px;margin-top:14px;padding-top:13px;border-top:1px solid var(--bd)"><i class="ti ti-users dim" style="font-size:15px"></i><span class="muted" style="font-size:12.5px">'+p[4]+' candidates</span></div></div></div>';}).join('');
+  document.getElementById('pipecards').innerHTML=pipes.map(function(p){return '<div class="card" style="padding:0;overflow:hidden;cursor:pointer" onclick="go(\'board\',\'Pipeline\')"><div style="height:3px;background:'+p[2]+'"></div><div style="padding:18px"><div style="width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--card2)"><i class="ti '+p[3]+'" style="font-size:21px;color:'+p[2]+'"></i></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px"><div class="h2" style="font-size:16px">'+p[0]+'</div><i class="ti ti-chevron-right dim"></i></div><div class="dim" style="font-size:12.5px;margin-top:4px">'+p[1]+'</div><div style="display:flex;align-items:center;gap:7px;margin-top:14px;padding-top:13px;border-top:1px solid var(--bd)"><i class="ti ti-users dim" style="font-size:15px"></i><span class="muted" style="font-size:12.5px">'+p[4]+' candidates</span></div></div></div>';}).join('');
 
-  var stages=[['Sourced','var(--blue)',[['Tan Wei Ming','Backend Engineer','TW','New','var(--green)',0]]],['Contacted','var(--teal2)',[['Aisha Rahman','Sales Executive','AR','3d','var(--amber)',1],['Ravi Kumar','DevOps Engineer','RK','8d','var(--dim)',0]]],['Screened','var(--purple)',[['Priya Nair','Accountant','PN','1d','var(--green)',0]]],['Submitted','var(--amber)',[['Lim Chee Keong','Project Manager','LC','2d','var(--amber)',0]]],['Interview','var(--green)',[['Nurul Huda','UX Designer','NH','Fri 3pm','var(--green)',0]]]];
-  document.getElementById('board').innerHTML=stages.map(function(s){var cards=s[2].map(function(c){var col=pal[c[2]]||'var(--teal)';return '<div class="ccard" onclick="openCand(\''+c[0]+'\',\''+c[1]+'\',\''+s[0]+'\',\''+col+'\')"><div style="display:flex;gap:9px;align-items:center">'+avHTML(c[0],col,30)+'<div style="min-width:0"><div style="font-weight:600;font-size:13px">'+c[0]+'</div><div class="dim" style="font-size:11px">'+c[1]+'</div></div></div><div style="display:flex;align-items:center;gap:6px;margin-top:9px;font-size:11px;color:var(--mut)"><span class="dot" style="background:'+c[4]+'"></span>'+c[3]+(c[5]?'<span style="margin-left:auto;color:var(--wa)"><i class="ti ti-brand-whatsapp"></i></span>':'')+'</div></div>';}).join('');return '<div class="col"><div style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;margin-bottom:11px"><span class="dot" style="background:'+s[1]+'"></span>'+s[0]+'<span class="dim" style="margin-left:auto">'+s[2].length+'</span></div>'+cards+'</div>';}).join('');
+  var stages=[['Sourced','var(--blue)',[['Tan Wei Ming','Backend Engineer','TW','New here','var(--green)',0]]],['Contacted','var(--teal2)',[['Aisha Rahman','Sales Executive','AR','3d · cooling off','var(--amber)',1],['Ravi Kumar','DevOps Engineer','RK','8d · sitting a while','var(--dim)',0]]],['Screened','var(--purple)',[['Priya Nair','Accountant','PN','1d · fresh','var(--green)',0]]],['Submitted','var(--amber)',[['Lim Chee Keong','Project Manager','LC','2d','var(--amber)',0]]],['Interview','var(--green)',[['Nurul Huda','UX Designer','NH','Fri 3pm','var(--green)',0]]]];
+  document.getElementById('board').innerHTML=stages.map(function(s){var cards=s[2].map(function(c){var col=pal[c[2]]||'var(--teal)';return '<div class="ccard" onclick="openCand(\''+c[0]+'\',\''+c[1]+'\',\''+s[0]+'\',\''+col+'\')"><div style="display:flex;gap:9px;align-items:center">'+avHTML(c[0],col,30)+'<div style="min-width:0"><div style="font-weight:600;font-size:13px">'+c[0]+'</div><div class="dim" style="font-size:11px">'+c[1]+'</div></div></div><div style="display:flex;align-items:center;gap:6px;margin-top:9px;font-size:10.5px;color:var(--mut)"><span class="dot" style="background:'+c[4]+'"></span>'+c[3]+(c[5]?'<span style="margin-left:auto;color:var(--wa)"><i class="ti ti-brand-whatsapp"></i></span>':'')+'</div></div>';}).join('');return '<div class="col"><div style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;margin-bottom:11px"><span class="dot" style="background:'+s[1]+'"></span>'+s[0]+'<span class="dim" style="margin-left:auto">'+s[2].length+'</span></div>'+cards+'</div>';}).join('');
 
-  var talent=[['Aisha Rahman','Sales Executive · KL','AR','Replied','var(--green)'],['Lee Jun Hao','Software Engineer · PJ','LJ','New','var(--amber)'],['Priya Nair','Accountant · KL','PN','Placed','var(--green)'],['Max Chew','Data Analyst · KL','MC','Sourced','var(--mut)'],['Mei Ling Chong','Finance Analyst · KL','ML','Screened','var(--teal2)']];
-  document.getElementById('talentlist').innerHTML=talent.map(function(t){var col=pal[t[2]]||'var(--teal)';var bg=t[4]==='var(--green)'?'var(--tealt)':t[4]==='var(--amber)'?'var(--ambt)':'var(--card2)';return '<div class="row" onclick="openCand(\''+t[0]+'\',\''+t[1]+'\',\'Sourced\',\''+col+'\')">'+avHTML(t[0],col,36)+'<div style="flex:1"><div style="font-weight:600">'+t[0]+'</div><div class="dim" style="font-size:12px">'+t[1]+'</div></div><span class="badge" style="background:'+bg+';color:'+t[4]+'">'+t[3]+'</span></div>';}).join('');
+  var talent=[['Aisha Rahman','Sales Executive · KL','AR','Replied','var(--green)','100%'],['Lee Jun Hao','Software Engineer · PJ','LJ','New','var(--amber)','98%'],['Priya Nair','Accountant · KL','PN','Placed','var(--green)','100%'],['Max Chew','Data Analyst · KL','MC','Sourced','var(--mut)','100%']];
+  document.getElementById('talentlist').innerHTML=talent.map(function(t){var col=pal[t[2]]||'var(--teal)';var bg=t[4]==='var(--green)'?'var(--tealt)':t[4]==='var(--amber)'?'var(--ambt)':'var(--card2)';var capcls=t[5]==='100%'?'cap ok':'cap';return '<div class="row" onclick="openCand(\''+t[0]+'\',\''+t[1]+'\',\'Sourced\',\''+col+'\')">'+avHTML(t[0],col,36)+'<div style="flex:1"><div style="font-weight:600">'+t[0]+'</div><div class="dim" style="font-size:12px">'+t[1]+'</div></div><span class="'+capcls+'">'+t[5]+' captured</span><span class="badge" style="background:'+bg+';color:'+t[4]+'">'+t[3]+'</span></div>';}).join('');
 
-  var chats=[['Siti Rahman','UX Designer','Thanks! I am available for a call Thu…','1h','S','var(--purple)',2],['Max Chew','Data Analyst','Sure, I will send my updated portfolio…','5h','M','var(--teal)',1],['Mei Ling Chong','Finance Analyst','Noted, looking forward to the next round.','24 Jun','M','var(--blue)',0]];
-  document.getElementById('chatlist').innerHTML=chats.map(function(c){return '<div class="row" style="margin-bottom:8px" onclick="openThread(\''+c[0]+'\',\''+c[4]+'\',\''+c[5]+'\')">'+avHTML(c[0],c[5],38)+'<div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span style="font-weight:600;font-size:13.5px">'+c[0]+'</span><span class="dim" style="font-size:11px">'+c[3]+'</span></div><div class="dim" style="font-size:11.5px;margin-top:1px">'+c[1]+'</div><div class="muted" style="font-size:12px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+c[2]+'</div></div>'+(c[6]?'<span class="badge" style="background:var(--teal);color:#03251f;align-self:flex-start">'+c[6]+'</span>':'')+'</div>';}).join('');
-
-  var cow=[['Bob Tan','Recruiter','12 placements','var(--teal)'],['Mei Wong','Sourcer','8 placements','var(--purple)'],['Raj Patel','Recruiter','15 placements','var(--amber)']];
-  document.getElementById('coworkerlist').innerHTML=cow.map(function(c){return '<div class="row">'+avHTML(c[0],c[3],36)+'<div style="flex:1"><div style="font-weight:600">'+c[0]+'</div><div class="dim" style="font-size:12px">'+c[1]+'</div></div><span class="muted" style="font-size:12.5px">'+c[2]+'</span></div>';}).join('');
-
-  window.openCand=function(n,r,s,c){document.getElementById('c-nm').textContent=n;document.getElementById('c-ro').textContent=r;document.getElementById('c-stage').textContent=s;var a=document.getElementById('c-av');a.textContent=ini(n);a.style.background=c;a.style.color=darkText(c);go('candidate','My Pipeline');};
-  window.moveStage=function(){var seq=['Sourced','Contacted','Screened','Submitted','Interview','Offer','Placed'];var el=document.getElementById('c-stage');var i=seq.indexOf(el.textContent);if(i<seq.length-1){el.textContent=seq[i+1];toast('Moved to '+seq[i+1]);}else{toast('Placed 🎉');}};
-  window.outcome=function(k){if(k===1){coins+=4;upCoins();toast('Logged · +4 coins');}else if(k===2){toast('Logged. A non-placement is normal.');}else{toast("We'll ask again tomorrow");}};
-  window.openThread=function(n,av,c){threadName=n;go('chat','Chat');document.getElementById('chat-empty').style.display='none';document.getElementById('chat-conv').style.display='flex';document.getElementById('t-nm').textContent=n;var a=document.getElementById('t-av');a.textContent=av;a.style.background=c;a.style.color=darkText(c);};
-  window.sendMsg=function(){var inp=document.getElementById('t-in');var t=inp.value.trim();if(!t)return;var m=document.getElementById('t-msgs');var d=document.createElement('div');d.style.cssText='display:flex;justify-content:flex-end;opacity:.5';d.innerHTML='<div class="bub" style="background:var(--wa);color:#053d1c">'+t+'</div>';m.appendChild(d);m.scrollTop=m.scrollHeight;inp.value='';setTimeout(function(){d.style.opacity='1';d.querySelector('.bub').innerHTML=t+' <i class="ti ti-checks" style="font-size:14px;vertical-align:-1px"></i>';toast('Sent on WhatsApp');},800);};
-  window.resetGen=function(){document.getElementById('ai-ph').style.display='block';document.getElementById('ai-body').style.display='none';['ai-1','ai-2','ai-3','ai-4'].forEach(function(id){document.getElementById(id).style.opacity='.15';});document.getElementById('ai-gen').innerHTML='<i class="ti ti-wand"></i>Generate';};
-  window.genResume=function(){var g=document.getElementById('ai-gen');g.innerHTML='<i class="ti ti-loader-2"></i>Generating…';document.getElementById('ai-ph').style.display='none';document.getElementById('ai-body').style.display='block';['ai-1','ai-2','ai-3','ai-4'].forEach(function(id,i){setTimeout(function(){document.getElementById(id).style.opacity='1';},450*(i+1));});setTimeout(function(){g.innerHTML='<i class="ti ti-refresh"></i>Regenerate';toast('Resume ready · by Gemini Flash');},450*5);};
-  function upCoins(){document.getElementById('coins').textContent=coins.toLocaleString();var b=document.getElementById('coin-bal');if(b)b.textContent=coins.toLocaleString();}
-  window.earn=function(n,why){coins+=n;upCoins();toast(why+' · +'+n+' coins');};
-  window.setLang=function(l,el){document.querySelectorAll('#st-lang button').forEach(function(b){b.classList.remove('on');});el.classList.add('on');document.getElementById('st-demo').textContent='Prompt preview: '+(l==='ms'?'"Adakah mereka membalas?"':'"Did they reply?"');};
+  window.openCand=function(n,r,s,c){document.getElementById('c-nm').textContent=n;document.getElementById('c-ro').textContent=r;document.getElementById('c-stage').textContent=s;var a=document.getElementById('c-av');a.textContent=ini(n);a.style.background=c;a.style.color=darkText(c);go('candidate','Pipeline');};
+  window.moveStage=function(){var seq=['Sourced','Contacted','Screened','Submitted','Interview','Offer','Placed'];var el=document.getElementById('c-stage');var i=seq.indexOf(el.textContent);if(i<seq.length-1){el.textContent=seq[i+1];toast('Moved to '+seq[i+1]+' — outcome capture triggered');}else{toast('Placed 🎉');}};
+  window.outcome=function(k){if(k===1){streak++;document.getElementById('streak').textContent=streak;toast('Logged · capture rate updated');}else if(k===2){toast('Logged. A non-placement is normal — never alarming.');}else{toast("Not yet — we'll ask again tomorrow");}};
+  var threadName='Aisha Rahman';
+  window.openThread=function(n,av,c){threadName=n;go('thread','Inbox & Replies');document.getElementById('t-nm').textContent=n;var a=document.getElementById('t-av');a.textContent=av;a.style.background=c;a.style.color=darkText(c);chTab('wa',document.querySelector('#ch-seg button'));};
+  var drafts={wa:'Hi Aisha! Here\'s the role one-pager. Are you free for a quick call this week?',em:'Hi Aisha,\n\nThanks for your interest. I\'ve attached the role one-pager — would you have 15 minutes this week for a quick call?\n\nBest,\nAisha (TalentBridge)',im:'Hi Aisha — saw your background in B2B sales. I\'m hiring for a KL sales role that fits well. Open to a quick chat?'};
+  window.chTab=function(ch,el){document.querySelectorAll('#ch-seg button').forEach(function(b){b.classList.remove('on');});if(el)el.classList.add('on');document.getElementById('t-in').value=drafts[ch];var s=document.getElementById('t-send');s.innerHTML='<i class="ti ti-send"></i>Send '+(ch==='wa'?'WhatsApp':ch==='em'?'Email':'InMail');s.className='btn '+(ch==='wa'?'wa':'teal');};
+  window.sendMsg=function(){var inp=document.getElementById('t-in');var t=inp.value.trim();if(!t)return;var m=document.getElementById('t-msgs');var d=document.createElement('div');d.style.cssText='display:flex;justify-content:flex-end;opacity:.5';d.innerHTML='<div class="bub" style="background:var(--wa);color:#053d1c">'+t.split('\n')[0]+'</div>';m.appendChild(d);m.scrollTop=m.scrollHeight;setTimeout(function(){d.style.opacity='1';d.querySelector('.bub').innerHTML+=' <i class="ti ti-checks" style="font-size:14px;vertical-align:-1px"></i>';toast('Sent · outbox-durable, idempotent');},800);};
+  window.runParse=function(){['p-1','p-2','p-3','p-4','p-done'].forEach(function(id){document.getElementById(id).style.opacity='.15';});var st=document.getElementById('p-status');st.innerHTML='<i class="ti ti-loader-2"></i> Reading <span style="font-family:monospace;color:var(--fg)">Lee_CV_2026.pdf</span> … <span class="dim">(Claude 3 Haiku)</span>';['p-1','p-2','p-3','p-4'].forEach(function(id,i){setTimeout(function(){document.getElementById(id).style.opacity='1';},450*(i+1));});setTimeout(function(){document.getElementById('p-done').style.opacity='1';st.innerHTML='<span style="color:var(--teal2)"><i class="ti ti-circle-check"></i> Parsed in 2.1s · plain states, never raw %</span>';},450*5);};
+  window.correctSkill=function(el){toast('Is this right? Currently "'+el.textContent.trim()+'" · pick a correction → teaches Yoseh ("Got it — I won\'t ask again")');};
+  window.search=function(){document.getElementById('s-out').style.display='block';toast('Streaming results · structured + lexical <100ms, semantic ~500ms');};
+  window.setLang=function(l,el){document.querySelectorAll('#st-lang button').forEach(function(b){b.classList.remove('on');});el.classList.add('on');document.getElementById('st-demo').textContent='Outcome prompt preview: '+(l==='ms'?'"Adakah mereka membalas?"':'"Did they reply?"');};
 })();
 </script>
 </body>
