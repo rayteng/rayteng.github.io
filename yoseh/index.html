@@ -85,8 +85,6 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
       <div class="nav" data-sec="talent" onclick="go('talent','Talent Pool')"><i class="ti ti-database"></i>Talent Pool</div>
       <div class="nav" data-sec="search" onclick="go('search','Search')"><i class="ti ti-search"></i>Search</div>
       <div class="nav" data-sec="pipelines" onclick="go('pipelines','Pipeline')"><i class="ti ti-layout-kanban"></i>Pipeline</div>
-      <div class="nlabel">You</div>
-      <div class="nav" data-sec="profile" onclick="go('profile','My Public Profile')"><i class="ti ti-star"></i>My Public Profile</div>
       <div class="nav" data-sec="settings" onclick="go('settings','Settings')"><i class="ti ti-settings"></i>Settings</div>
       <div style="flex:1"></div>
       <div class="suser"><div class="av" style="width:34px;height:34px;background:var(--purple);color:#fff;font-size:12px">AR</div><div style="min-width:0"><div style="font-size:13px;font-weight:600">Aisha Rahman</div><div style="font-size:11px;color:var(--dim)">Recruiter · TalentBridge</div></div></div>
@@ -191,12 +189,6 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
           <div style="font-size:14px;font-weight:700;margin:20px 0 4px">Did they reply? <span class="dim" style="font-weight:500;font-size:12px">· Adakah mereka membalas?</span></div>
           <div class="dim" style="font-size:11.5px;margin-bottom:10px">3 of 8 captured · building this candidate's track record</div>
           <div style="display:flex;gap:10px;max-width:440px"><button class="btn" style="flex:1;background:var(--green);border:none;color:#042b1d" onclick="outcome(1)">Yes</button><button class="btn" style="flex:1" onclick="outcome(2)">No reply</button><button class="btn" style="flex:1" onclick="outcome(3)">Not yet</button></div>
-        </section>
-
-        <section class="view" id="v-profile" data-sec="profile">
-          <div class="card" style="display:flex;align-items:center;gap:16px"><div class="av" style="width:60px;height:60px;background:var(--purple);color:#fff;font-size:22px">AR</div><div style="flex:1"><div class="h2">Aisha Rahman</div><div class="muted">Senior Recruiter · TalentBridge Recruitment</div><div class="dim" style="font-size:12.5px;margin-top:4px">yoseh.io/aisha-rahman · your portable track record</div></div><button class="btn tout" onclick="toast('Public profile link copied')"><i class="ti ti-link"></i>Copy link</button></div>
-          <div class="grid3" style="margin-top:14px"><div class="tile"><div class="tlabel">Placements</div><div class="tnum">48</div></div><div class="tile"><div class="tlabel">Verified-outcome share</div><div class="tnum" style="color:var(--teal2)">68%</div></div><div class="tile"><div class="tlabel">Avg time-to-fill</div><div class="tnum">19d</div></div></div>
-          <div class="card" style="margin-top:14px"><div class="h2" style="font-size:15px;margin-bottom:6px">Why this matters</div><div class="muted" style="font-size:13px;line-height:1.6">Every verified outcome you log builds a portable, recruiter-owned credential — the moat that compounds across agencies (the verified-credential network).</div></div>
         </section>
 
         <section class="view" id="v-settings" data-sec="settings">
