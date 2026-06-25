@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Yoseh — Interactive Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css" rel="stylesheet">
+<style>
+  body{margin:0;background:#F1F5F9;font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;color:#0F172A;-webkit-font-smoothing:antialiased}
+  .page{max-width:740px;margin:0 auto;padding:28px 16px 48px}
+  .phead{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .ymark{width:30px;height:30px;border-radius:8px;background:#4F46E5;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px}
+  .ptitle{font-size:18px;font-weight:600}
+  .ptag{font-size:13px;color:#64748B;margin:0 0 18px 40px}
+  .pfoot{font-size:11.5px;color:#94A3B8;text-align:center;margin-top:18px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="phead"><div class="ymark">Y</div><div class="ptitle">Yoseh — interactive preview</div></div>
+  <p class="ptag">A WhatsApp-native ATS for recruitment agencies. Click the left-rail menus and the buttons inside — it all works.</p>
+
+<div class="yo-app" data-t="light" data-d="comfortable">
+<style>
+.yo-app{--bg:#fff;--sub:#F8FAFC;--mut:#F1F5F9;--bd:#E2E8F0;--bds:#CBD5E1;--fg:#0F172A;--fgm:#64748B;--fgs:#475569;--pri:#4F46E5;--pris:#EEF2FF;--ok:#059669;--oks:#ECFDF5;--warn:#F59E0B;font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--fg)}
+.yo-app[data-t="dark"]{--bg:#0B1120;--sub:#0F172A;--mut:#1E293B;--bd:#1E293B;--bds:#334155;--fg:#F1F5F9;--fgm:#94A3B8;--fgs:#CBD5E1;--pri:#818CF8;--pris:#1E1B4B;--ok:#34D399;--oks:#0c2a22;--warn:#FBBF24}
+.yo-win{position:relative;background:var(--bg);border:0.5px solid var(--bds);border-radius:12px;overflow:hidden;box-shadow:0 12px 32px rgb(15 23 42 / 0.10)}
+.yo-tt{height:30px;background:var(--sub);border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:7px;padding:0 12px}
+.yo-d{width:9px;height:9px;border-radius:50%}
+.yo-body{display:flex;height:452px}
+.yo-rail{width:50px;background:var(--sub);border-right:0.5px solid var(--bd);display:flex;flex-direction:column;align-items:center;padding:9px 0;gap:3px}
+.yo-rb{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--fgm);font-size:19px;cursor:pointer}
+.yo-rb:hover{background:var(--mut)}
+.yo-rb.on{background:var(--pris);color:var(--pri)}
+.yo-content{flex:1;position:relative;min-width:0}
+.yo-view{position:absolute;inset:0;display:none;overflow-y:auto}
+.yo-pad{padding:14px}
+.yo-h{font-size:14px;font-weight:500;margin:0}
+.yo-sub{font-size:11.5px;color:var(--fgm);margin:2px 0 0}
+.yo-av{border-radius:50%;background:var(--pris);color:var(--pri);font-weight:500;display:flex;align-items:center;justify-content:center;flex:none}
+.yo-card{background:var(--bg);border:0.5px solid var(--bd);border-radius:8px;padding:8px;cursor:pointer}
+.yo-card:hover{border-color:var(--bds)}
+.yo-nm{font-size:12px;font-weight:500;color:var(--fg);line-height:1.25}
+.yo-ro{font-size:10.5px;color:var(--fgm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.yo-pill{font-size:10.5px;color:var(--pri);background:var(--pris);border-radius:6px;padding:3px 7px;display:inline-flex;align-items:center;gap:5px}
+.yo-hd{width:7px;height:7px;border-radius:50%;flex:none}
+.yo-btn{height:34px;padding:0 13px;border:0.5px solid var(--bds);background:var(--bg);color:var(--fgs);border-radius:8px;font-size:12.5px;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.yo-btn:hover{background:var(--mut)}
+.yo-btn.pri{background:var(--pri);border:none;color:#fff}
+.yo-btn.ok{background:var(--ok);border:none;color:#fff}
+.yo-chip{font-size:11px;padding:3px 9px;border-radius:999px;background:var(--pris);color:var(--pri);display:inline-flex;align-items:center;gap:5px}
+.yo-seg{display:inline-flex;border:0.5px solid var(--bd);border-radius:8px;overflow:hidden}
+.yo-seg button{height:30px;padding:0 12px;border:none;background:var(--bg);color:var(--fgs);font-size:12px;font-family:inherit;cursor:pointer}
+.yo-seg button.on{background:var(--pri);color:#fff}
+.yo-row{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:0.5px solid var(--bd);cursor:pointer}
+.yo-row:hover{background:var(--sub)}
+.yo-badge{font-size:10px;padding:2px 8px;border-radius:999px;font-weight:500}
+.yo-bub{max-width:75%;padding:7px 10px;border-radius:10px;font-size:12px;line-height:1.4}
+.yo-toast{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:var(--fg);color:var(--bg);font-size:12px;padding:8px 14px;border-radius:8px;display:none;align-items:center;gap:7px;z-index:9}
+.yo-back{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--fgm);cursor:pointer;background:none;border:none;font-family:inherit;padding:0}
+.yo-input{width:100%;height:36px;background:var(--mut);border:0.5px solid var(--bd);border-radius:8px;padding:0 11px;color:var(--fg);font-size:12.5px;font-family:inherit;box-sizing:border-box}
+</style>
+
+<div class="yo-win">
+  <div class="yo-tt">
+    <span class="yo-d" style="background:#F87171"></span><span class="yo-d" style="background:#FBBF24"></span><span class="yo-d" style="background:#34D399"></span>
+    <span style="font-size:11px;color:var(--fgm);margin-left:6px;font-weight:500">Yoseh — TalentBridge Recruitment</span>
+  </div>
+  <div class="yo-body">
+    <div class="yo-rail">
+      <div style="width:30px;height:30px;border-radius:8px;background:var(--pri);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:15px;margin-bottom:5px">Y</div>
+      <div class="yo-rb" data-sec="inbox" onclick="yoShow('view-inbox')"><i class="ti ti-inbox" aria-label="Inbox"></i></div>
+      <div class="yo-rb" data-sec="board" onclick="yoShow('view-board')"><i class="ti ti-layout-kanban" aria-label="Board"></i></div>
+      <div class="yo-rb" data-sec="talent" onclick="yoShow('view-talent')"><i class="ti ti-users" aria-label="Talent pool"></i></div>
+      <div class="yo-rb" data-sec="search" onclick="yoShow('view-search')"><i class="ti ti-search" aria-label="Search"></i></div>
+      <div class="yo-rb" data-sec="daily" onclick="yoShow('view-daily')"><i class="ti ti-checklist" aria-label="Daily queue"></i></div>
+      <div style="flex:1"></div>
+      <div class="yo-rb" data-sec="settings" onclick="yoShow('view-settings')"><i class="ti ti-settings" aria-label="Settings"></i></div>
+    </div>
+    <div class="yo-content">
+
+      <div class="yo-view" id="view-board" data-sec="board">
+        <div style="padding:11px 14px;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between">
+          <div><p class="yo-h">Board · Software Engineers</p><p class="yo-sub">29 candidates · click any card to open</p></div>
+          <button class="yo-btn pri" onclick="yoShow('view-talent')"><i class="ti ti-plus"></i>Add</button>
+        </div>
+        <div style="display:flex;gap:8px;padding:12px 14px;overflow:hidden">
+          <div style="width:120px;flex:none"><div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:500;color:var(--fgs);margin-bottom:7px">Sourced <span style="color:var(--fgm)">12</span></div>
+            <div class="yo-card" onclick="yoOpen('Tan Wei Ming','Backend Engineer','Sourced')" style="margin-bottom:7px"><div style="display:flex;gap:7px;align-items:center"><div class="yo-av" style="width:24px;height:24px;font-size:10px">TW</div><div style="min-width:0"><div class="yo-nm">Tan Wei Ming</div><div class="yo-ro">Backend Engineer</div></div></div><div style="display:flex;align-items:center;gap:6px;margin-top:7px;font-size:10.5px;color:var(--fgm)"><span class="yo-hd" style="background:var(--ok)"></span>New here</div></div>
+            <div class="yo-card" onclick="yoOpen('Siti Aminah','Data Analyst','Sourced')"><div style="display:flex;gap:7px;align-items:center"><div class="yo-av" style="width:24px;height:24px;font-size:10px">SA</div><div style="min-width:0"><div class="yo-nm">Siti Aminah</div><div class="yo-ro">Data Analyst</div></div></div></div>
+          </div>
+          <div style="width:120px;flex:none"><div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:500;color:var(--fgs);margin-bottom:7px">Contacted <span style="color:var(--fgm)">5</span></div>
+            <div class="yo-card" onclick="yoOpen('Aisha Rahman','Sales Executive','Contacted')" style="margin-bottom:7px"><div style="display:flex;gap:7px;align-items:center"><div class="yo-av" style="width:24px;height:24px;font-size:10px">AR</div><div style="min-width:0"><div class="yo-nm">Aisha Rahman</div><div class="yo-ro">Sales Executive</div></div></div><div style="display:flex;align-items:center;gap:6px;margin-top:7px;font-size:10.5px;color:var(--fgm)"><span class="yo-hd" style="background:var(--warn)"></span>3d in stage<span style="margin-left:auto;color:var(--ok)"><i class="ti ti-brand-whatsapp"></i></span></div><div class="yo-pill" style="margin-top:7px"><i class="ti ti-arrow-right"></i>Send a follow-up</div></div>
+            <div class="yo-card" onclick="yoOpen('Ravi Kumar','DevOps Engineer','Contacted')"><div style="display:flex;gap:7px;align-items:center"><div class="yo-av" style="width:24px;height:24px;font-size:10px">RK</div><div style="min-width:0"><div class="yo-nm">Ravi Kumar</div><div class="yo-ro">DevOps Engineer</div></div></div><div style="display:flex;align-items:center;gap:6px;margin-top:7px;font-size:10.5px;color:var(--fgm)"><span class="yo-hd" style="background:var(--fgm)"></span>8d in stage</div></div>
+          </div>
+          <div style="width:120px;flex:none"><div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:500;color:var(--fgs);margin-bottom:7px">Screened <span style="color:var(--fgm)">3</span></div>
+            <div class="yo-card" onclick="yoOpen('Priya Nair','Accountant','Screened')"><div style="display:flex;gap:7px;align-items:center"><div class="yo-av" style="width:24px;height:24px;font-size:10px">PN</div><div style="min-width:0"><div class="yo-nm">Priya Nair</div><div class="yo-ro">Accountant</div></div></div><div style="display:flex;align-items:center;gap:6px;margin-top:7px;font-size:10.5px;color:var(--fgm)"><span class="yo-hd" style="background:var(--ok)"></span>1d in stage</div><div class="yo-pill" style="margin-top:7px"><i class="ti ti-send"></i>Submit to client</div></div>
+          </div>
+          <div style="width:120px;flex:none"><div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:500;color:var(--fgs);margin-bottom:7px">Submitted <span style="color:var(--fgm)">2</span></div>
+            <div class="yo-card" onclick="yoOpen('Lim Chee Keong','Project Manager','Submitted')"><div style="display:flex;gap:7px;align-items:center"><div class="yo-av" style="width:24px;height:24px;font-size:10px">LC</div><div style="min-width:0"><div class="yo-nm">Lim Chee Keong</div><div class="yo-ro">Project Manager</div></div></div></div>
+          </div>
+          <div style="width:120px;flex:none"><div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:500;color:var(--fgs);margin-bottom:7px">Interview <span style="color:var(--fgm)">2</span></div>
+            <div class="yo-card" onclick="yoOpen('Nurul Huda','UX Designer','Interview')"><div style="display:flex;gap:7px;align-items:center"><div class="yo-av" style="width:24px;height:24px;font-size:10px">NH</div><div style="min-width:0"><div class="yo-nm">Nurul Huda</div><div class="yo-ro">UX Designer</div></div></div></div>
+          </div>
+          <div style="width:120px;flex:none"><div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:500;color:var(--fgs);margin-bottom:7px">Offer <span style="color:var(--fgm)">1</span></div></div>
+        </div>
+      </div>
+
+      <div class="yo-view" id="view-candidate" data-sec="board"><div class="yo-pad">
+        <button class="yo-back" onclick="yoShow('view-board')"><i class="ti ti-arrow-left"></i>Board</button>
+        <div style="display:flex;align-items:center;gap:11px;margin-top:11px">
+          <div class="yo-av" id="yc-av" style="width:40px;height:40px;font-size:13px">AR</div>
+          <div style="flex:1"><div style="font-size:15px;font-weight:500" id="yc-nm">Aisha Rahman</div><div style="font-size:11.5px;color:var(--fgm)" id="yc-ro">Sales Executive</div></div>
+          <span class="yo-badge" id="yc-stage" style="background:var(--pris);color:var(--pri)">Contacted</span>
+        </div>
+        <div style="font-size:10.5px;color:var(--fgm);margin-top:8px"><i class="ti ti-history" style="vertical-align:-2px"></i> added by Aisha · via WhatsApp forward · 14 Mar 2026</div>
+        <div style="background:var(--sub);border:0.5px solid var(--bd);border-radius:10px;padding:10px;margin-top:12px">
+          <div style="display:flex;justify-content:flex-start;margin-bottom:6px"><div class="yo-bub" style="background:var(--mut)">Hi, saw your CV — open to a sales role in KL?</div></div>
+          <div style="display:flex;justify-content:flex-end"><div class="yo-bub" style="background:var(--pri);color:#fff">Yes! Tell me more</div></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+          <button class="yo-btn pri" onclick="yoOpenThread()"><i class="ti ti-brand-whatsapp"></i>Message</button>
+          <button class="yo-btn" onclick="yoMove()"><i class="ti ti-arrow-right"></i>Move to next stage</button>
+        </div>
+        <div style="font-size:11.5px;color:var(--fgs);font-weight:500;margin:16px 0 8px">Next step · suggested</div>
+        <div style="display:flex;align-items:center;gap:8px;background:var(--pris);border-radius:8px;padding:9px 11px"><i class="ti ti-bulb" style="color:var(--pri)"></i><span style="font-size:12px;color:var(--pri);flex:1">Send the role one-pager and ask for availability</span><button class="yo-btn pri" style="height:28px" onclick="yoToast('Draft opened in composer')">Do it</button></div>
+        <div style="font-size:11.5px;color:var(--fgs);font-weight:500;margin:16px 0 6px">Did they reply?</div>
+        <div style="display:flex;gap:8px">
+          <button class="yo-btn ok" style="flex:1" onclick="yoOutcome('yes')">Yes</button>
+          <button class="yo-btn" style="flex:1;background:var(--mut)" onclick="yoOutcome('no')">No reply</button>
+          <button class="yo-btn" style="flex:1" onclick="yoOutcome('ny')">Not yet</button>
+        </div>
+      </div></div>
+
+      <div class="yo-view" id="view-inbox" data-sec="inbox"><div class="yo-pad">
+        <p class="yo-h">Inbox</p><p class="yo-sub">WhatsApp · 3 unread</p>
+        <div style="margin-top:8px">
+          <div class="yo-row" onclick="yoOpenThread('Aisha Rahman','AR')"><div class="yo-av" style="width:34px;height:34px;font-size:12px">AR</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span class="yo-nm">Aisha Rahman</span><span style="font-size:10.5px;color:var(--fgm)">2m</span></div><div class="yo-ro" style="margin-top:2px">Yes! Tell me more</div></div><span class="yo-hd" style="background:var(--pri)"></span></div>
+          <div class="yo-row" onclick="yoOpenThread('Ravi Kumar','RK')"><div class="yo-av" style="width:34px;height:34px;font-size:12px">RK</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span class="yo-nm">Ravi Kumar</span><span style="font-size:10.5px;color:var(--fgm)">1h</span></div><div class="yo-ro" style="margin-top:2px">Can we talk on Thursday?</div></div><span class="yo-hd" style="background:var(--pri)"></span></div>
+          <div class="yo-row" onclick="yoOpenThread('Priya Nair','PN')"><div class="yo-av" style="width:34px;height:34px;font-size:12px">PN</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span class="yo-nm">Priya Nair</span><span style="font-size:10.5px;color:var(--fgm)">3h</span></div><div class="yo-ro" style="margin-top:2px">Thanks, I'll send my certs.</div></div></div>
+          <div class="yo-row" onclick="yoOpenThread('Nurul Huda','NH')"><div class="yo-av" style="width:34px;height:34px;font-size:12px">NH</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span class="yo-nm">Nurul Huda</span><span style="font-size:10.5px;color:var(--fgm)">1d</span></div><div class="yo-ro" style="margin-top:2px">Interview confirmed for Fri 3pm.</div></div></div>
+        </div>
+      </div></div>
+
+      <div class="yo-view" id="view-thread" data-sec="inbox"><div class="yo-pad">
+        <button class="yo-back" onclick="yoShow('view-inbox')"><i class="ti ti-arrow-left"></i>Inbox</button>
+        <div style="display:flex;align-items:center;gap:9px;margin:10px 0"><div class="yo-av" id="yt-av" style="width:32px;height:32px;font-size:12px">AR</div><div><div class="yo-nm" id="yt-nm">Aisha Rahman</div><div style="font-size:10.5px;color:var(--ok)"><i class="ti ti-brand-whatsapp" style="vertical-align:-1px"></i> WhatsApp · online</div></div></div>
+        <div id="yt-msgs" style="background:var(--sub);border:0.5px solid var(--bd);border-radius:10px;padding:10px;min-height:120px;display:flex;flex-direction:column;gap:7px">
+          <div style="display:flex"><div class="yo-bub" style="background:var(--mut)">Hi, saw your CV — open to a sales role in KL?</div></div>
+          <div style="display:flex;justify-content:flex-end"><div class="yo-bub" style="background:var(--pri);color:#fff">Yes! Tell me more</div></div>
+        </div>
+        <div style="display:flex;gap:6px;margin:10px 0 7px"><span class="yo-chip">WhatsApp</span><span style="font-size:11px;padding:3px 9px;border-radius:999px;background:var(--mut);color:var(--fgm)">Email</span><span style="font-size:11px;padding:3px 9px;border-radius:999px;background:var(--mut);color:var(--fgm)">InMail</span><span style="font-size:10.5px;color:var(--fgm);margin-left:auto;align-self:center">draft suggested below</span></div>
+        <textarea id="yt-in" class="yo-input" style="height:54px;padding:8px 11px;resize:none">Hi Aisha! Here's the role one-pager. Are you free for a quick call this week?</textarea>
+        <div style="display:flex;justify-content:flex-end;margin-top:8px"><button class="yo-btn pri" id="yt-send" onclick="yoSend()"><i class="ti ti-send"></i>Send</button></div>
+      </div></div>
+
+      <div class="yo-view" id="view-talent" data-sec="talent"><div class="yo-pad">
+        <p class="yo-h">Talent pool</p><p class="yo-sub">1,284 candidates</p>
+        <div onclick="yoShow('view-parse')" style="margin:10px 0 12px;border:1.5px dashed var(--bds);border-radius:10px;padding:14px;text-align:center;cursor:pointer;background:var(--sub)">
+          <i class="ti ti-upload" style="font-size:22px;color:var(--pri)"></i>
+          <div style="font-size:12.5px;font-weight:500;margin-top:4px">Send anything</div>
+          <div style="font-size:11px;color:var(--fgm)">Drop a CV, paste a screenshot, or forward a WhatsApp — Yoseh parses it</div>
+        </div>
+        <div style="display:flex;font-size:10.5px;color:var(--fgm);padding:0 4px 6px;border-bottom:0.5px solid var(--bd)"><span style="flex:2">Candidate</span><span style="flex:1">Outcome</span><span style="width:64px;text-align:right">Captured</span></div>
+        <div class="yo-row" onclick="yoOpen('Aisha Rahman','Sales Executive','Contacted')" style="border-bottom:0.5px solid var(--bd)"><div style="flex:2;display:flex;align-items:center;gap:9px"><div class="yo-av" style="width:28px;height:28px;font-size:11px">AR</div><div><div class="yo-nm">Aisha Rahman</div><div class="yo-ro">Sales Executive</div></div></div><div style="flex:1"><span class="yo-badge" style="background:var(--oks);color:var(--ok)">Replied</span></div><div style="width:64px;text-align:right;font-size:11px;color:var(--fgm)">100%</div></div>
+        <div class="yo-row" onclick="yoOpen('Ravi Kumar','DevOps Engineer','Contacted')" style="border-bottom:0.5px solid var(--bd)"><div style="flex:2;display:flex;align-items:center;gap:9px"><div class="yo-av" style="width:28px;height:28px;font-size:11px">RK</div><div><div class="yo-nm">Ravi Kumar</div><div class="yo-ro">DevOps Engineer</div></div></div><div style="flex:1"><span class="yo-badge" style="background:var(--mut);color:var(--fgm)">No reply</span></div><div style="width:64px;text-align:right;font-size:11px;color:var(--warn)">98%</div></div>
+        <div class="yo-row" onclick="yoOpen('Priya Nair','Accountant','Screened')"><div style="flex:2;display:flex;align-items:center;gap:9px"><div class="yo-av" style="width:28px;height:28px;font-size:11px">PN</div><div><div class="yo-nm">Priya Nair</div><div class="yo-ro">Accountant</div></div></div><div style="flex:1"><span class="yo-badge" style="background:var(--oks);color:var(--ok)">Placed</span></div><div style="width:64px;text-align:right;font-size:11px;color:var(--fgm)">100%</div></div>
+      </div></div>
+
+      <div class="yo-view" id="view-parse" data-sec="talent"><div class="yo-pad">
+        <button class="yo-back" onclick="yoShow('view-talent')"><i class="ti ti-arrow-left"></i>Talent pool</button>
+        <div style="font-size:12px;color:var(--fgm);margin:11px 0 10px" id="yp-status"><i class="ti ti-loader-2"></i> Reading <span style="font-family:monospace;color:var(--fg)">Lee_CV_2026.pdf</span> …</div>
+        <div style="background:var(--bg);border:0.5px solid var(--bd);border-radius:10px;padding:13px">
+          <div id="yp-1" style="opacity:.25;display:flex;align-items:center;gap:10px;transition:opacity .3s"><div class="yo-av" style="width:38px;height:38px;font-size:13px">LJ</div><div><div style="font-size:14px;font-weight:500">Lee Jun Hao</div><div style="font-size:11px;color:var(--fgm)">Software Engineer</div></div></div>
+          <div id="yp-2" style="opacity:.25;margin-top:11px;font-size:11.5px;color:var(--fgs);transition:opacity .3s"><i class="ti ti-mail" style="vertical-align:-2px"></i> lee.junhao@email.com&nbsp;&nbsp;·&nbsp;&nbsp;<i class="ti ti-phone" style="vertical-align:-2px"></i> +60 12-345 6789&nbsp;&nbsp;·&nbsp;&nbsp;<i class="ti ti-map-pin" style="vertical-align:-2px"></i> Petaling Jaya</div>
+          <div id="yp-3" style="opacity:.25;margin-top:11px;transition:opacity .3s"><div style="font-size:11px;color:var(--fgm);margin-bottom:5px">Experience · 6 years</div><div style="font-size:12px">Senior Engineer — Grab (2022–now)</div><div style="font-size:12px;color:var(--fgs)">Engineer — Shopee (2020–2022)</div></div>
+          <div id="yp-4" style="opacity:.25;margin-top:11px;display:flex;gap:5px;flex-wrap:wrap;transition:opacity .3s"><span class="yo-chip">Go</span><span class="yo-chip">React</span><span class="yo-chip">PostgreSQL</span><span class="yo-chip">Mandarin</span></div>
+        </div>
+        <div id="yp-done" style="opacity:.25;margin-top:12px;display:flex;align-items:center;gap:8px;transition:opacity .3s"><span style="font-size:11.5px;color:var(--ok)"><i class="ti ti-circle-check" style="vertical-align:-2px"></i> 100% captured · nothing dropped</span><button class="yo-btn pri" style="margin-left:auto" onclick="yoToast('Lee Jun Hao added to Sourced');yoShow('view-board')">Add to pipeline</button></div>
+      </div></div>
+
+      <div class="yo-view" id="view-search" data-sec="search"><div class="yo-pad">
+        <p class="yo-h">Search</p><p class="yo-sub">Ask in any language — BM, English, 中文, தமிழ்</p>
+        <input class="yo-input" id="ys-in" style="margin-top:10px" value="Java engineers in KL, 5+ years, speaks Mandarin"/>
+        <div style="display:flex;justify-content:flex-end;margin-top:8px"><button class="yo-btn pri" onclick="yoSearch()"><i class="ti ti-search"></i>Search</button></div>
+        <div id="ys-out" style="display:none;margin-top:12px">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px"><span style="font-size:10.5px;color:var(--fgm)">Understood:</span><span class="yo-chip">Java <i class="ti ti-x"></i></span><span class="yo-chip">Kuala Lumpur <i class="ti ti-x"></i></span><span class="yo-chip">5+ yrs <i class="ti ti-x"></i></span><span class="yo-chip">Mandarin <i class="ti ti-x"></i></span></div>
+          <div class="yo-card" onclick="yoOpen('Tan Wei Ming','Backend Engineer','Sourced')" style="margin-bottom:8px"><div style="display:flex;align-items:center;gap:10px"><div class="yo-av" style="width:30px;height:30px;font-size:11px">TW</div><div style="flex:1"><div class="yo-nm">Tan Wei Ming</div><div class="yo-ro">Backend Engineer · 7 yrs · KL</div></div><span class="yo-badge" style="background:var(--oks);color:var(--ok)"><i class="ti ti-check"></i> Strong</span></div><div style="font-size:10.5px;color:var(--pri);margin-top:7px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> Why? Java + Mandarin matched, KL location, 7 yrs ≥ 5</div></div>
+          <div class="yo-card" onclick="yoOpen('Ravi Kumar','DevOps Engineer','Contacted')"><div style="display:flex;align-items:center;gap:10px"><div class="yo-av" style="width:30px;height:30px;font-size:11px">RK</div><div style="flex:1"><div class="yo-nm">Ravi Kumar</div><div class="yo-ro">DevOps Engineer · 6 yrs · KL</div></div><span class="yo-badge" style="background:var(--mut);color:var(--fgm)">~ Partial</span></div><div style="font-size:10.5px;color:var(--pri);margin-top:7px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> Why? Java + KL matched · Mandarin not confirmed</div></div>
+        </div>
+      </div></div>
+
+      <div class="yo-view" id="view-daily" data-sec="daily"><div class="yo-pad">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><p class="yo-h">Daily outreach queue</p><p class="yo-sub" id="yd-sub">3 outcomes to log</p></div><div style="text-align:center"><div style="font-size:22px;font-weight:500"><i class="ti ti-flame" style="color:var(--warn);font-size:17px;vertical-align:-1px"></i> <span id="yd-streak">4</span></div><div style="font-size:10px;color:var(--fgm)">day streak</div></div></div>
+        <div id="yd-list" style="margin-top:12px"></div>
+        <div id="yd-empty" style="display:none;text-align:center;padding:30px 10px"><i class="ti ti-circle-check" style="font-size:30px;color:var(--ok)"></i><div style="font-size:14px;font-weight:500;margin-top:7px">You're caught up for today</div><div style="font-size:11.5px;color:var(--fgm)">That's day <span id="yd-streak2">5</span> of your run. Nice work.</div></div>
+      </div></div>
+
+      <div class="yo-view" id="view-settings" data-sec="settings"><div class="yo-pad">
+        <p class="yo-h">Settings</p>
+        <div style="margin-top:14px"><div style="font-size:12px;font-weight:500;margin-bottom:7px">Theme</div><div class="yo-seg" id="yset-theme"><button onclick="yoTheme('light',this)" class="on">Light</button><button onclick="yoTheme('dark',this)">Dark</button><button onclick="yoTheme('system',this)">System</button></div></div>
+        <div style="margin-top:16px"><div style="font-size:12px;font-weight:500;margin-bottom:7px">Density</div><div class="yo-seg" id="yset-den"><button onclick="yoDen('comfortable',this)" class="on">Comfortable</button><button onclick="yoDen('compact',this)">Compact</button></div></div>
+        <div style="margin-top:16px"><div style="font-size:12px;font-weight:500;margin-bottom:7px">Language</div><div class="yo-seg" id="yset-lang"><button onclick="yoLang('en',this)" class="on">English</button><button onclick="yoLang('ms',this)">Bahasa Melayu</button></div><div style="font-size:11px;color:var(--fgm);margin-top:7px" id="yset-demo">Prompt preview: "Did they reply?"</div></div>
+        <div style="margin-top:16px"><div style="font-size:12px;font-weight:500;margin-bottom:5px">Stage labels</div><div style="font-size:11px;color:var(--fgm)">Rename your 7 board stages — the structure stays fixed so outcome data compares across agencies.</div></div>
+      </div></div>
+
+    </div>
+  </div>
+  <div class="yo-toast" id="yo-toast"><i class="ti ti-circle-check"></i><span></span></div>
+</div>
+</div>
+
+  <p class="pfoot">Interactive preview of Yoseh — sample data, work in progress. Not the final product.<br/>Best viewed on a laptop or desktop browser (Chrome, Edge, Safari).</p>
+</div>
+<script>
+(function(){
+  var app=document.querySelector('.yo-app');
+  var views={};document.querySelectorAll('.yo-view').forEach(function(v){views[v.id]=v;});
+  var streak=4, threadName='Aisha Rahman', threadAv='AR';
+  window.yoShow=function(id){for(var k in views)views[k].style.display='none';views[id].style.display='block';views[id].scrollTop=0;var sec=views[id].getAttribute('data-sec');document.querySelectorAll('.yo-rb').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-sec')===sec);});if(id==='view-parse')yoParse();if(id==='view-daily')yoDaily();};
+  window.yoToast=function(m){var t=document.getElementById('yo-toast');t.querySelector('span').textContent=m;t.style.display='flex';clearTimeout(t._h);t._h=setTimeout(function(){t.style.display='none';},2200);};
+  window.yoOpen=function(n,r,s){document.getElementById('yc-nm').textContent=n;document.getElementById('yc-ro').textContent=r;document.getElementById('yc-stage').textContent=s;var i=n.split(' ');document.getElementById('yc-av').textContent=(i[0][0]+(i[1]?i[1][0]:'')).toUpperCase();threadName=n;threadAv=document.getElementById('yc-av').textContent;yoShow('view-candidate');};
+  window.yoMove=function(){var seq=['Sourced','Contacted','Screened','Submitted','Interview','Offer','Placed'];var el=document.getElementById('yc-stage');var i=seq.indexOf(el.textContent);if(i<seq.length-1){el.textContent=seq[i+1];yoToast('Moved to '+seq[i+1]);}else{yoToast('Already placed');}};
+  window.yoOutcome=function(k){if(k==='yes'){streak++;document.getElementById('yd-streak').textContent=streak;yoToast("Logged — day "+streak+" of your run");}else if(k==='no'){yoToast('Logged. A non-placement is normal.');}else{yoToast("Okay — we'll ask again tomorrow");}};
+  window.yoOpenThread=function(n,av){if(n){threadName=n;threadAv=av;}document.getElementById('yt-nm').textContent=threadName;document.getElementById('yt-av').textContent=threadAv;yoShow('view-thread');};
+  window.yoSend=function(){var inp=document.getElementById('yt-in');var txt=inp.value.trim();if(!txt)return;var btn=document.getElementById('yt-send');btn.innerHTML='<i class="ti ti-loader-2"></i>Sending…';var msgs=document.getElementById('yt-msgs');var d=document.createElement('div');d.style.cssText='display:flex;justify-content:flex-end;opacity:.5';d.innerHTML='<div class="yo-bub" style="background:var(--pri);color:#fff">'+txt+'</div>';msgs.appendChild(d);inp.value='';setTimeout(function(){d.style.opacity='1';d.querySelector('.yo-bub').innerHTML=txt+' <i class="ti ti-checks" style="font-size:13px;vertical-align:-1px"></i>';btn.innerHTML='<i class="ti ti-send"></i>Send';yoToast('Sent on WhatsApp');},900);};
+  window.yoSearch=function(){var o=document.getElementById('ys-out');o.style.display='block';yoToast('2 strong matches found');};
+  window.yoParse=function(){['yp-1','yp-2','yp-3','yp-4','yp-done'].forEach(function(id){document.getElementById(id).style.opacity='.25';});var st=document.getElementById('yp-status');st.innerHTML='<i class="ti ti-loader-2"></i> Reading <span style="font-family:monospace;color:var(--fg)">Lee_CV_2026.pdf</span> …';var seq=['yp-1','yp-2','yp-3','yp-4'];seq.forEach(function(id,i){setTimeout(function(){document.getElementById(id).style.opacity='1';},450*(i+1));});setTimeout(function(){document.getElementById('yp-done').style.opacity='1';st.innerHTML='<span style="color:var(--ok)"><i class="ti ti-circle-check" style="vertical-align:-2px"></i> Parsed in 2.1s</span>';},450*5);};
+  var daily=[['Aisha Rahman','AR','messaged 3 days ago'],['Ravi Kumar','RK','messaged 1 day ago'],['Siti Aminah','SA','messaged 2 days ago']];
+  window.yoDaily=function(){var list=document.getElementById('yd-list');list.innerHTML='';document.getElementById('yd-empty').style.display=daily.length?'none':'block';document.getElementById('yd-sub').textContent=daily.length?daily.length+' outcomes to log':'all done';daily.forEach(function(c){var d=document.createElement('div');d.style.cssText='background:var(--bg);border:0.5px solid var(--bd);border-radius:10px;padding:11px;margin-bottom:9px';d.innerHTML='<div style="display:flex;align-items:center;gap:9px;margin-bottom:9px"><div class="yo-av" style="width:30px;height:30px;font-size:11px">'+c[1]+'</div><div style="flex:1"><div class="yo-nm">'+c[0]+'</div><div style="font-size:10.5px;color:var(--fgm)">'+c[2]+'</div></div><span style="font-size:12px;font-weight:500">Did they reply?</span></div><div style="display:flex;gap:7px"><button class="yo-btn ok" style="flex:1;height:30px">Yes</button><button class="yo-btn" style="flex:1;height:30px;background:var(--mut)">No reply</button><button class="yo-btn" style="flex:1;height:30px">Not yet</button></div>';var btns=d.querySelectorAll('button');btns.forEach(function(b,bi){b.onclick=function(){if(bi===0){streak++;document.getElementById('yd-streak').textContent=streak;document.getElementById('yd-streak2').textContent=streak;}daily.splice(daily.indexOf(c),1);yoDaily();yoToast(bi===0?'Logged — streak '+streak:bi===1?'Logged. Non-placement noted.':'We will ask tomorrow');};});list.appendChild(d);});};
+  window.yoTheme=function(t,el){app.setAttribute('data-t',t==='dark'?'dark':'light');document.querySelectorAll('#yset-theme button').forEach(function(b){b.classList.remove('on');});el.classList.add('on');yoToast(t==='system'?'Following your OS theme':t+' theme on');};
+  window.yoDen=function(d,el){app.setAttribute('data-d',d);document.querySelectorAll('#yset-den button').forEach(function(b){b.classList.remove('on');});el.classList.add('on');yoToast(d+' density');};
+  window.yoLang=function(l,el){document.querySelectorAll('#yset-lang button').forEach(function(b){b.classList.remove('on');});el.classList.add('on');document.getElementById('yset-demo').textContent='Prompt preview: '+(l==='ms'?'"Adakah mereka membalas?"':'"Did they reply?"');};
+  yoShow('view-board');
+})();
+</script>
+</body>
+</html>
