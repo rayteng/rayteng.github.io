@@ -75,6 +75,25 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
 .fchip{height:30px;padding:0 13px;border:1px solid var(--bd);background:var(--card);color:var(--mut);border-radius:999px;font-size:12px;font-family:inherit;cursor:pointer;font-weight:500}
 .fchip.on{background:var(--tealt);border-color:rgba(0,186,167,.3);color:var(--teal2)}
 .tpsearch{flex:1;position:relative}.tpsearch .in{padding-left:38px}.tpsearch i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:16px}
+.tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+.tbl th{text-align:left;font-size:10.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.04em;font-weight:600;padding:11px 12px;border-bottom:1px solid var(--bd);cursor:pointer;white-space:nowrap;position:sticky;top:0;background:var(--card);z-index:1}
+.tbl th:hover{color:var(--mut)}
+.tbl td{padding:11px 12px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr.cand{cursor:pointer}.tbl tr.cand:hover td{background:var(--card2)}
+.tbl.compact td,.tbl.compact th{padding:6px 12px}
+.ck{width:17px;height:17px;border-radius:5px;border:1.5px solid var(--bd2);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:transparent;vertical-align:middle}
+.ck.on{background:var(--teal);border-color:var(--teal);color:#03251f}
+.pgbar{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:12.5px;color:var(--mut)}
+.pgbtn{width:32px;height:32px;border:1px solid var(--bd);background:var(--card);border-radius:8px;color:var(--fg);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.pgbtn:disabled{color:var(--dim);cursor:not-allowed;opacity:.5}
+.bulkbar{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);display:none;align-items:center;gap:12px;background:var(--card2);border:1px solid var(--bd2);border-radius:12px;padding:10px 16px;z-index:40}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;z-index:60}
+.drawer{position:fixed;top:0;right:0;height:100vh;width:448px;max-width:94vw;background:var(--bg);border-left:1px solid var(--bd2);transform:translateX(100%);transition:transform .25s ease;z-index:61;display:flex;flex-direction:column}
+.drawer.open{transform:translateX(0)}
+.dtab{flex:1;height:42px;border:none;background:transparent;color:var(--mut);font-weight:600;font-size:13px;font-family:inherit;cursor:pointer;border-bottom:2px solid transparent}
+.dtab.on{color:var(--teal2);border-bottom-color:var(--teal2)}
+.resume{background:#fff;color:#111;border-radius:8px;padding:22px;font-size:12px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -140,16 +159,41 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
           <div class="dim" style="font-size:12px;margin-top:9px">1,284 candidates · drop a CV, paste a screenshot, or forward to <span style="font-family:monospace;color:var(--teal2)">talentbridge@in.yoseh.com</span></div>
           <div id="tp-understood" style="display:none;margin:14px 0 0"></div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:16px 0 12px">
-            <span class="dim" style="font-size:11.5px">Filter:</span>
+            <span class="dim" style="font-size:11.5px">Outcome:</span>
             <button class="fchip on" data-f="all" onclick="tpFilter('all',this)">All</button>
             <button class="fchip" data-f="Replied" onclick="tpFilter('Replied',this)">Replied</button>
             <button class="fchip" data-f="New" onclick="tpFilter('New',this)">New</button>
             <button class="fchip" data-f="Placed" onclick="tpFilter('Placed',this)">Placed</button>
             <button class="fchip" data-f="No reply" onclick="tpFilter('No reply',this)">No reply</button>
-            <span class="dim" style="font-size:11.5px;margin-left:auto" id="tp-count">1,284 candidates</span>
+            <div style="margin-left:auto;display:flex;align-items:center;gap:8px"><span class="dim" style="font-size:11.5px">Density</span><div class="seg" style="height:30px"><button class="on" id="den-comf" onclick="tpDensity('comf')">Comfortable</button><button id="den-comp" onclick="tpDensity('comp')">Compact</button></div></div>
           </div>
-          <div id="talentlist"></div>
-          <div id="tp-empty" class="card" style="display:none;text-align:center;padding:26px"><div class="muted" style="font-size:13px">No matches. <span class="dim">Broaden by: drop “Mandarin”, widen location, or lower the year filter.</span></div></div>
+          <div class="card" style="padding:0;overflow:hidden">
+            <div style="max-height:540px;overflow-y:auto">
+              <table class="tbl" id="tp-table">
+                <thead><tr>
+                  <th style="width:30px"><span class="ck" id="ck-all" onclick="tpSelAll()"><i class="ti ti-check" style="font-size:12px"></i></span></th>
+                  <th onclick="tpSort('name')">Candidate <i class="ti ti-arrows-sort" style="font-size:11px"></i></th>
+                  <th onclick="tpSort('role')">Role</th>
+                  <th onclick="tpSort('loc')">Location</th>
+                  <th onclick="tpSort('stage')">Stage</th>
+                  <th onclick="tpSort('cap')">Captured</th>
+                  <th onclick="tpSort('act')">Last activity</th>
+                </tr></thead>
+                <tbody id="tp-body"></tbody>
+              </table>
+            </div>
+          </div>
+          <div id="tp-empty" class="card" style="display:none;text-align:center;padding:26px;margin-top:12px"><div class="muted" style="font-size:13px">No matches. <span class="dim">Broaden by: drop “Mandarin”, widen location, or lower the year filter.</span></div></div>
+          <div class="pgbar">
+            <span id="tp-range">—</span>
+            <span style="margin-left:auto" class="dim" id="tp-count">—</span>
+            <span class="dim">·</span>
+            <span class="dim">Rows</span>
+            <select class="in" id="tp-size" style="width:auto;height:30px;padding:0 8px" onchange="tpPage(1)"><option>12</option><option>25</option><option>50</option></select>
+            <button class="pgbtn" id="pg-prev" onclick="tpPage(tpCur-1)"><i class="ti ti-chevron-left"></i></button>
+            <span id="tp-pageinfo" style="min-width:88px;text-align:center">—</span>
+            <button class="pgbtn" id="pg-next" onclick="tpPage(tpCur+1)"><i class="ti ti-chevron-right"></i></button>
+          </div>
         </section>
 
         <section class="view" id="v-parse" data-sec="talent">
@@ -206,6 +250,50 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
     </div>
   </div>
 </div>
+<div class="bulkbar" id="bulkbar"><span style="font-weight:700;font-size:13px"><span id="bulk-n">0</span> selected</span><button class="btn" style="height:32px" onclick="toast('Added to pipeline')"><i class="ti ti-plus"></i>Add to pipeline</button><button class="btn" style="height:32px" onclick="toast('Tagged')"><i class="ti ti-tag"></i>Tag</button><button class="btn" style="height:32px" onclick="toast('Exported CSV')"><i class="ti ti-download"></i>Export</button><button class="btn" style="height:32px" onclick="tpClearSel()">Clear</button></div>
+<div class="overlay" id="dr-overlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer">
+  <div style="display:flex;align-items:center;gap:12px;padding:18px 18px 12px">
+    <div class="av" id="dr-av" style="width:48px;height:48px;font-size:17px;background:var(--purple);color:#fff">AR</div>
+    <div style="flex:1;min-width:0"><div style="font-size:17px;font-weight:700" id="dr-nm">—</div><div class="muted" id="dr-ro" style="font-size:12.5px">—</div></div>
+    <button class="back" style="margin:0" onclick="closeDrawer()" aria-label="Close"><i class="ti ti-x" style="font-size:19px"></i></button>
+  </div>
+  <div style="display:flex;gap:8px;padding:0 18px 12px"><span class="cap ok"><i class="ti ti-circle-check"></i> <span id="dr-cap">100%</span> captured</span><span class="badge" id="dr-stage" style="background:var(--tealt);color:var(--teal2)">Contacted</span></div>
+  <div style="display:flex;border-bottom:1px solid var(--bd);padding:0 8px"><button class="dtab on" id="dtab-p" onclick="drTab('p')">Profile</button><button class="dtab" id="dtab-r" onclick="drTab('r')">Resume</button><button class="dtab" id="dtab-a" onclick="drTab('a')">Activity</button></div>
+  <div style="flex:1;overflow-y:auto;padding:18px">
+    <div id="dr-profile">
+      <div class="dim" style="font-size:11px;font-weight:700;letter-spacing:.05em;margin-bottom:8px">CONTACT</div>
+      <div style="font-size:13px" class="muted"><i class="ti ti-mail dim"></i> <span id="dr-email">—</span><br/><i class="ti ti-map-pin dim"></i> <span id="dr-loc">—</span></div>
+      <div class="dim" style="font-size:11px;font-weight:700;letter-spacing:.05em;margin:18px 0 8px">SKILLS · tap to correct (teaches Yoseh)</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip tl" onclick="correctSkill(this)">Java</span><span class="chip tl" onclick="correctSkill(this)">Spring</span><span class="chip tl" onclick="correctSkill(this)">PostgreSQL</span><span class="chip tl" onclick="correctSkill(this)">Mandarin</span></div>
+      <div class="dim" style="font-size:11.5px;margin:16px 0"><i class="ti ti-history" style="vertical-align:-2px"></i> <span id="dr-prov">—</span></div>
+      <div style="font-size:13px;font-weight:700;margin:6px 0 8px">Did they reply? <span class="dim" style="font-weight:500;font-size:11.5px">· Adakah mereka membalas?</span></div>
+      <div style="display:flex;gap:8px"><button class="btn" style="flex:1;height:34px;background:var(--green);border:none;color:#042b1d" onclick="outcome(1)">Yes</button><button class="btn" style="flex:1;height:34px" onclick="outcome(2)">No reply</button><button class="btn" style="flex:1;height:34px" onclick="outcome(3)">Not yet</button></div>
+    </div>
+    <div id="dr-resume" style="display:none">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn" style="height:32px" onclick="toast('Resume downloaded (PDF)')"><i class="ti ti-download"></i>Download PDF</button></div>
+      <div class="resume">
+        <div style="font-size:18px;font-weight:700" id="dr-rname">—</div>
+        <div style="color:#666;font-size:11px;margin-bottom:12px" id="dr-rrole">—</div>
+        <div style="font-weight:700;font-size:9.5px;letter-spacing:.06em;color:#999;margin:10px 0 4px">SUMMARY</div>
+        <div>Experienced professional with a strong record across Malaysian and regional employers. Bilingual (EN / BM / Mandarin), results-oriented, available immediately.</div>
+        <div style="font-weight:700;font-size:9.5px;letter-spacing:.06em;color:#999;margin:13px 0 4px">EXPERIENCE</div>
+        <div style="font-weight:600">Senior — Grab · 2022–now</div><div style="color:#555">Led a core team; shipped reliably at scale, cut latency 40%.</div>
+        <div style="font-weight:600;margin-top:6px">Mid-level — Shopee · 2020–2022</div><div style="color:#555">Built and maintained production services for the MY/SG market.</div>
+        <div style="font-weight:700;font-size:9.5px;letter-spacing:.06em;color:#999;margin:13px 0 4px">EDUCATION</div>
+        <div>B.Sc. Computer Science — Universiti Malaya</div>
+      </div>
+    </div>
+    <div id="dr-activity" style="display:none">
+      <div style="border-left:2px solid var(--bd);padding-left:16px;margin-left:4px">
+        <div style="margin-bottom:16px;position:relative"><span style="position:absolute;left:-23px;top:3px;width:9px;height:9px;border-radius:50%;background:var(--teal)"></span><div style="font-size:13px;font-weight:600">Replied on WhatsApp</div><div class="dim" style="font-size:11.5px">2h ago</div></div>
+        <div style="margin-bottom:16px;position:relative"><span style="position:absolute;left:-23px;top:3px;width:9px;height:9px;border-radius:50%;background:var(--amber)"></span><div style="font-size:13px;font-weight:600">Outreach sent · WhatsApp</div><div class="dim" style="font-size:11.5px">3 days ago</div></div>
+        <div style="position:relative"><span style="position:absolute;left:-23px;top:3px;width:9px;height:9px;border-radius:50%;background:var(--mut)"></span><div style="font-size:13px;font-weight:600">Added via WhatsApp forward</div><div class="dim" style="font-size:11.5px">14 Mar 2026 · 100% captured</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:14px 18px;border-top:1px solid var(--bd);display:flex;gap:8px"><button class="btn wa" style="flex:1" onclick="drMessage()"><i class="ti ti-brand-whatsapp"></i>Message</button><button class="btn" onclick="toast('Moved to next stage')"><i class="ti ti-arrow-right"></i>Move stage</button></div>
+</aside>
 <div class="toast" id="toast"><i class="ti ti-circle-check"></i><span></span></div>
 <script>
 (function(){
@@ -231,23 +319,48 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
   var stages=[['Sourced','var(--blue)',[['Tan Wei Ming','Backend Engineer','TW','New here','var(--green)',0]]],['Contacted','var(--teal2)',[['Aisha Rahman','Sales Executive','AR','3d · cooling off','var(--amber)',1],['Ravi Kumar','DevOps Engineer','RK','8d · sitting a while','var(--dim)',0]]],['Screened','var(--purple)',[['Priya Nair','Accountant','PN','1d · fresh','var(--green)',0]]],['Submitted','var(--amber)',[['Lim Chee Keong','Project Manager','LC','2d','var(--amber)',0]]],['Interview','var(--green)',[['Nurul Huda','UX Designer','NH','Fri 3pm','var(--green)',0]]]];
   document.getElementById('board').innerHTML=stages.map(function(s){var cards=s[2].map(function(c){var col=pal[c[2]]||'var(--teal)';return '<div class="ccard" onclick="openCand(\''+c[0]+'\',\''+c[1]+'\',\''+s[0]+'\',\''+col+'\')"><div style="display:flex;gap:9px;align-items:center">'+avHTML(c[0],col,30)+'<div style="min-width:0"><div style="font-weight:600;font-size:13px">'+c[0]+'</div><div class="dim" style="font-size:11px">'+c[1]+'</div></div></div><div style="display:flex;align-items:center;gap:6px;margin-top:9px;font-size:10.5px;color:var(--mut)"><span class="dot" style="background:'+c[4]+'"></span>'+c[3]+(c[5]?'<span style="margin-left:auto;color:var(--wa)"><i class="ti ti-brand-whatsapp"></i></span>':'')+'</div></div>';}).join('');return '<div class="col"><div style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;margin-bottom:11px"><span class="dot" style="background:'+s[1]+'"></span>'+s[0]+'<span class="dim" style="margin-left:auto">'+s[2].length+'</span></div>'+cards+'</div>';}).join('');
 
-  var talent=[
-    ['Tan Wei Ming','Backend Engineer · 7 yrs · KL · Mandarin','TW','New','var(--amber)','100%','exact'],
-    ['Aisha Rahman','Sales Executive · KL','AR','Replied','var(--green)','100%',''],
-    ['Lee Jun Hao','Software Engineer · 6 yrs · PJ · Mandarin','LJ','New','var(--amber)','98%','exact'],
-    ['Mei Ling Chong','Full-Stack Engineer · 5 yrs · PJ · Mandarin','ML','Sourced','var(--mut)','97%','semantic'],
-    ['Ravi Kumar','DevOps Engineer · 6 yrs · KL','RK','No reply','var(--mut)','98%','similar'],
-    ['Priya Nair','Accountant · KL','PN','Placed','var(--green)','100%',''],
-    ['Max Chew','Data Analyst · KL','MC','Sourced','var(--mut)','100%',''],
-    ['Nurul Huda','UX Designer · KL','NH','Interview','var(--teal2)','100%','']
-  ];
-  var tpMode='all',tpFilterVal='all';
+  var FIRST=['Aisha','Tan Wei','Lee Jun','Mei Ling','Ravi','Priya','Max','Nurul','Siti','Lim Chee','Faiz','Wong Kar','Daniel','Aina','Jason','Kavita','Hafiz','Bala','Yusof','Chong Mei','Arjun','Farah','Vincent','Nadia','Hakim','Sharon','Imran','Wei Jie','Anand','Zara'];
+  var LAST=['Rahman','Ming','Hao','Chong','Kumar','Nair','Chew','Huda','Aminah','Keong','Zikri','Wai','Tan','Zulkifli','Lim','Devi','Ismail','Pillai','Bakar','Ling','Subra','Mokhtar','Lee','Hassan','Razak','Wong','Abdullah','Goh','Krishnan','Yusof'];
+  var ROLES=['Backend Engineer','Frontend Engineer','Full-Stack Engineer','DevOps Engineer','Data Analyst','Data Scientist','UX Designer','Product Manager','Project Manager','Sales Executive','Accountant','Marketing Manager','Finance Analyst','QA Engineer','HR Executive'];
+  var LOCS=['Kuala Lumpur','Petaling Jaya','Subang Jaya','Shah Alam','George Town','Johor Bahru','Cyberjaya'];
+  var STAGES=['Sourced','Contacted','Screened','Submitted','Interview','Offer','Placed'];
+  var STATUS=['New','Replied','No reply','Placed','Sourced','Interview'];
+  var STATUSCOL={'New':'var(--amber)','Replied':'var(--green)','No reply':'var(--mut)','Placed':'var(--green)','Sourced':'var(--mut)','Interview':'var(--teal2)'};
+  var ACOLS=['var(--purple)','var(--teal)','var(--blue)','var(--amber)','var(--green)','var(--red)'];
+  var CAPS=['100%','100%','98%','97%','100%','95%','99%','100%'];
+  var ACTS=['2m ago','18m ago','1h ago','3h ago','today','1d ago','2d ago','4d ago','1w ago'];
+  var ENGINEER={'Backend Engineer':1,'Frontend Engineer':1,'Full-Stack Engineer':1,'DevOps Engineer':1,'Data Scientist':1,'QA Engineer':1};
+  var POOL=[];
+  for(var i=0;i<1284;i++){var nm=FIRST[i%FIRST.length]+' '+LAST[(i*7)%LAST.length];POOL.push({name:nm,role:ROLES[(i*3)%ROLES.length],loc:LOCS[(i*5)%LOCS.length],yrs:2+(i%14),stage:STAGES[(i*2)%STAGES.length],status:STATUS[(i*11)%STATUS.length],cap:CAPS[i%CAPS.length],act:ACTS[(i*13)%ACTS.length],col:ACOLS[i%ACOLS.length],grade:(i%3===0?'exact':i%3===1?'similar':'semantic')});}
+  var tpMode='all',tpFilterVal='all',tpSortK=null,tpSortD=1,tpCur=1,sel={},drCur=null;
+  function tpIni(n){var p=n.split(' ');return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();}
+  function stageCol(s){return {'Sourced':'var(--blue)','Contacted':'var(--teal2)','Screened':'var(--purple)','Submitted':'var(--amber)','Interview':'var(--green)','Offer':'var(--red)','Placed':'var(--teal)'}[s]||'var(--mut)';}
   function statusBg(c){return c==='var(--green)'?'var(--tealt)':c==='var(--amber)'?'var(--ambt)':'var(--card2)';}
   function gradeBadge(g){if(g==='exact')return '<span class="badge" style="background:var(--tealt);color:var(--green)"><i class="ti ti-check"></i> exact</span>';if(g==='similar')return '<span class="badge" style="background:var(--card2);color:var(--mut)">~ similar</span>';return '<span class="badge" style="background:var(--card2);color:var(--blue)">↗ semantic</span>';}
-  window.renderTalent=function(){var list;if(tpMode==='search')list=talent.filter(function(t){return t[6];});else if(tpFilterVal!=='all')list=talent.filter(function(t){return t[3]===tpFilterVal;});else list=talent;document.getElementById('tp-empty').style.display=list.length?'none':'block';document.getElementById('talentlist').innerHTML=list.map(function(t){var col=pal[t[2]]||'var(--teal)';var right=tpMode==='search'?gradeBadge(t[6]):'<span class="badge" style="background:'+statusBg(t[4])+';color:'+t[4]+'">'+t[3]+'</span>';var capcls=t[5]==='100%'?'cap ok':'cap';return '<div class="row" onclick="openCand(\''+t[0]+'\',\''+t[1].split(' · ')[0]+'\',\'Sourced\',\''+col+'\')">'+avHTML(t[0],col,36)+'<div style="flex:1;min-width:0"><div style="font-weight:600">'+t[0]+'</div><div class="dim" style="font-size:12px">'+t[1]+'</div></div><span class="'+capcls+'">'+t[5]+'</span>'+right+'</div>';}).join('');document.getElementById('tp-count').textContent=tpMode==='search'?list.length+' matches':tpMode==='filter'?list.length+' shown':'1,284 candidates';};
-  window.tpFilter=function(f,el){tpMode=(f==='all')?'all':'filter';tpFilterVal=f;document.querySelectorAll('#v-talent .fchip[data-f]').forEach(function(b){b.classList.toggle('on',b===el);});document.getElementById('tp-understood').style.display='none';renderTalent();};
-  window.tpSearch=function(){var inp=document.getElementById('tp-in');if(!inp.value.trim())inp.value='jurutera Java di KL, 5+ tahun, boleh Mandarin';tpMode='search';document.querySelectorAll('#v-talent .fchip[data-f]').forEach(function(b){b.classList.remove('on');});var u=document.getElementById('tp-understood');u.style.display='block';u.innerHTML='<div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center"><span class="dim" style="font-size:11.5px">Understood (canonical):</span><span class="chip tl">jurutera → software_engineer</span><span class="chip tl">Java</span><span class="chip tl">KL → kuala_lumpur</span><span class="chip tl">5+ yrs</span><span class="chip tl">Mandarin</span><button class="fchip" style="margin-left:auto" onclick="tpClear()"><i class="ti ti-x"></i> Clear</button></div><div style="font-size:11px;color:var(--teal2);margin-top:8px"><i class="ti ti-info-circle"></i> Streaming · structured + lexical under 100ms, semantic ~500ms · plain states, never raw %</div>';renderTalent();toast('Streaming results · tap a chip to adjust');};
-  window.tpClear=function(){document.getElementById('tp-understood').style.display='none';tpMode='all';tpFilterVal='all';document.querySelectorAll('#v-talent .fchip[data-f]').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-f')==='all');});renderTalent();};
+  function num(n){return n.toLocaleString();}
+  function tpFiltered(){var L=POOL;if(tpMode==='search')L=L.filter(function(c){return ENGINEER[c.role]&&(c.loc==='Kuala Lumpur'||c.loc==='Petaling Jaya');});else if(tpFilterVal!=='all')L=L.filter(function(c){return c.status===tpFilterVal;});if(tpSortK){L=L.slice().sort(function(a,b){var av=tpSortK==='cap'?parseInt(a.cap):(''+a[tpSortK]).toLowerCase();var bv=tpSortK==='cap'?parseInt(b.cap):(''+b[tpSortK]).toLowerCase();return av<bv?-tpSortD:av>bv?tpSortD:0;});}return L;}
+  window.renderTalent=function(){var L=tpFiltered();var size=parseInt(document.getElementById('tp-size').value);var pages=Math.max(1,Math.ceil(L.length/size));if(tpCur>pages)tpCur=pages;if(tpCur<1)tpCur=1;var start=(tpCur-1)*size;var page=L.slice(start,start+size);
+    document.getElementById('tp-empty').style.display=L.length?'none':'block';
+    document.getElementById('tp-body').innerHTML=page.map(function(c){var gi=POOL.indexOf(c);var on=sel[gi]?'on':'';var right=tpMode==='search'?gradeBadge(c.grade):'<span class="badge" style="background:'+statusBg(STATUSCOL[c.status])+';color:'+STATUSCOL[c.status]+'">'+c.status+'</span>';return '<tr class="cand" onclick="openDrawer('+gi+')"><td onclick="event.stopPropagation();tpSel('+gi+')"><span class="ck '+on+'"><i class="ti ti-check" style="font-size:12px"></i></span></td><td><div style="display:flex;align-items:center;gap:10px"><div class="av" style="width:30px;height:30px;background:'+c.col+';font-size:11px;color:'+darkText(c.col)+'">'+tpIni(c.name)+'</div><span style="font-weight:600">'+c.name+'</span></div></td><td class="muted">'+c.role+'<span class="dim"> · '+c.yrs+'y</span></td><td class="muted">'+c.loc+'</td><td><span class="dot" style="background:'+stageCol(c.stage)+';display:inline-block;margin-right:7px;vertical-align:middle"></span><span class="muted">'+c.stage+'</span></td><td><span class="'+(c.cap==='100%'?'cap ok':'cap')+'">'+c.cap+'</span></td><td class="dim">'+c.act+'</td></tr>';}).join('');
+    document.getElementById('tp-range').textContent=L.length?(num(start+1)+'–'+num(Math.min(start+size,L.length))+' of '+num(L.length)):'0 results';
+    document.getElementById('tp-pageinfo').textContent='Page '+tpCur+' / '+num(pages);
+    document.getElementById('pg-prev').disabled=tpCur<=1;document.getElementById('pg-next').disabled=tpCur>=pages;
+    document.getElementById('tp-count').textContent=tpMode==='search'?num(L.length)+' matches':num(L.length)+(tpFilterVal==='all'?' candidates':' shown');
+    var allOn=page.length&&page.every(function(c){return sel[POOL.indexOf(c)];});document.getElementById('ck-all').classList.toggle('on',!!allOn);
+    var n=Object.keys(sel).filter(function(k){return sel[k];}).length;document.getElementById('bulk-n').textContent=n;document.getElementById('bulkbar').style.display=n?'flex':'none';};
+  window.tpSort=function(k){if(tpSortK===k)tpSortD=-tpSortD;else{tpSortK=k;tpSortD=1;}renderTalent();};
+  window.tpPage=function(p){tpCur=p;renderTalent();};
+  window.tpDensity=function(d){document.getElementById('tp-table').classList.toggle('compact',d==='comp');document.getElementById('den-comf').classList.toggle('on',d==='comf');document.getElementById('den-comp').classList.toggle('on',d==='comp');};
+  window.tpSel=function(gi){sel[gi]=!sel[gi];renderTalent();};
+  window.tpSelAll=function(){var L=tpFiltered();var size=parseInt(document.getElementById('tp-size').value);var start=(tpCur-1)*size;var page=L.slice(start,start+size);var allOn=page.length&&page.every(function(c){return sel[POOL.indexOf(c)];});page.forEach(function(c){sel[POOL.indexOf(c)]=!allOn;});renderTalent();};
+  window.tpClearSel=function(){sel={};renderTalent();};
+  window.tpFilter=function(f,el){tpMode=(f==='all')?'all':'filter';tpFilterVal=f;tpCur=1;document.querySelectorAll('#v-talent .fchip[data-f]').forEach(function(b){b.classList.toggle('on',b===el);});document.getElementById('tp-understood').style.display='none';renderTalent();};
+  window.tpSearch=function(){var inp=document.getElementById('tp-in');if(!inp.value.trim())inp.value='jurutera Java di KL, 5+ tahun, boleh Mandarin';tpMode='search';tpCur=1;document.querySelectorAll('#v-talent .fchip[data-f]').forEach(function(b){b.classList.remove('on');});var u=document.getElementById('tp-understood');u.style.display='block';u.innerHTML='<div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center"><span class="dim" style="font-size:11.5px">Understood (canonical):</span><span class="chip tl">jurutera → software_engineer</span><span class="chip tl">Java</span><span class="chip tl">KL → kuala_lumpur</span><span class="chip tl">5+ yrs</span><span class="chip tl">Mandarin</span><button class="fchip" style="margin-left:auto" onclick="tpClear()"><i class="ti ti-x"></i> Clear</button></div><div style="font-size:11px;color:var(--teal2);margin-top:8px"><i class="ti ti-info-circle"></i> Streaming · structured + lexical under 100ms, semantic ~500ms · plain states, never raw %</div>';renderTalent();toast('Streaming results · tap a chip to adjust');};
+  window.tpClear=function(){document.getElementById('tp-understood').style.display='none';tpMode='all';tpFilterVal='all';tpCur=1;document.querySelectorAll('#v-talent .fchip[data-f]').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-f')==='all');});renderTalent();};
+  window.openDrawer=function(gi){var c=POOL[gi];drCur=c;document.getElementById('dr-nm').textContent=c.name;document.getElementById('dr-ro').textContent=c.role+' · '+c.yrs+' yrs · '+c.loc;var a=document.getElementById('dr-av');a.textContent=tpIni(c.name);a.style.background=c.col;a.style.color=darkText(c.col);document.getElementById('dr-cap').textContent=c.cap;var st=document.getElementById('dr-stage');st.textContent=c.stage;document.getElementById('dr-email').textContent=c.name.toLowerCase().replace(/[^a-z]+/g,'.')+'@email.com';document.getElementById('dr-loc').textContent=c.loc;document.getElementById('dr-prov').textContent='added by Aisha · via WhatsApp forward · 14 Mar 2026';document.getElementById('dr-rname').textContent=c.name;document.getElementById('dr-rrole').textContent=c.role+' · '+c.yrs+' yrs · '+c.loc;drTab('p');document.getElementById('dr-overlay').style.display='block';document.getElementById('drawer').classList.add('open');};
+  window.closeDrawer=function(){document.getElementById('drawer').classList.remove('open');document.getElementById('dr-overlay').style.display='none';};
+  window.drTab=function(t){['p','r','a'].forEach(function(x){document.getElementById('dtab-'+x).classList.toggle('on',x===t);document.getElementById('dr-'+({p:'profile',r:'resume',a:'activity'}[x])).style.display=x===t?'block':'none';});};
+  window.drMessage=function(){if(!drCur)return;var n=drCur.name;closeDrawer();openThread(n,tpIni(n),'var(--purple)');};
   renderTalent();
 
   window.openCand=function(n,r,s,c){document.getElementById('c-nm').textContent=n;document.getElementById('c-ro').textContent=r;document.getElementById('c-stage').textContent=s;var a=document.getElementById('c-av');a.textContent=ini(n);a.style.background=c;a.style.color=darkText(c);go('candidate','Pipeline');};
