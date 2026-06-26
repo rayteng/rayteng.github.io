@@ -72,6 +72,9 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
 .ccard:hover{border-color:var(--bd2);background:var(--card2)}
 .cap{font-size:11px;color:var(--amber);background:var(--ambt);border:1px solid rgba(249,177,4,.25);border-radius:7px;padding:3px 8px;display:inline-flex;align-items:center;gap:5px}
 .cap.ok{color:var(--green);background:var(--tealt);border-color:rgba(0,187,127,.25)}
+.fchip{height:30px;padding:0 13px;border:1px solid var(--bd);background:var(--card);color:var(--mut);border-radius:999px;font-size:12px;font-family:inherit;cursor:pointer;font-weight:500}
+.fchip.on{background:var(--tealt);border-color:rgba(0,186,167,.3);color:var(--teal2)}
+.tpsearch{flex:1;position:relative}.tpsearch .in{padding-left:38px}.tpsearch i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:16px}
 </style>
 </head>
 <body>
@@ -83,7 +86,6 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
       <div class="nav on" data-sec="today" onclick="go('today','Today')"><i class="ti ti-checklist"></i>Today<span class="bdg">3</span></div>
       <div class="nav" data-sec="inbox" onclick="go('inbox','Inbox & Replies')"><i class="ti ti-message-circle"></i>Inbox</div>
       <div class="nav" data-sec="talent" onclick="go('talent','Talent Pool')"><i class="ti ti-database"></i>Talent Pool</div>
-      <div class="nav" data-sec="search" onclick="go('search','Search')"><i class="ti ti-search"></i>Search</div>
       <div class="nav" data-sec="pipelines" onclick="go('pipelines','Pipeline')"><i class="ti ti-layout-kanban"></i>Pipeline</div>
       <div class="nav" data-sec="settings" onclick="go('settings','Settings')"><i class="ti ti-settings"></i>Settings</div>
       <div style="flex:1"></div>
@@ -130,9 +132,24 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
         </section>
 
         <section class="view" id="v-talent" data-sec="talent">
-          <div onclick="go('parse','Talent Pool')" style="border:1.5px dashed var(--bd2);border-radius:15px;padding:22px;text-align:center;cursor:pointer;background:var(--card)"><i class="ti ti-cloud-upload" style="font-size:26px;color:var(--teal2)"></i><div style="font-size:14px;font-weight:700;margin-top:7px">Send anything</div><div class="dim" style="font-size:12.5px">Drop a file · paste a screenshot / text / portal URL · or forward via email or WhatsApp — the card builds itself</div></div>
-          <div class="muted" style="font-size:13px;margin:18px 0 10px">1,284 candidates · forward to <span style="font-family:monospace;color:var(--teal2)">talentbridge@in.yoseh.com</span></div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <div class="tpsearch"><i class="ti ti-search"></i><input class="in" id="tp-in" value="" placeholder="Search or ask in any language — e.g. jurutera Java di KL, boleh Mandarin" onkeydown="if(event.key==='Enter')tpSearch()"/></div>
+            <button class="btn teal" onclick="tpSearch()"><i class="ti ti-search"></i>Search</button>
+            <button class="btn" onclick="go('parse','Talent Pool')"><i class="ti ti-upload"></i>Upload resume</button>
+          </div>
+          <div class="dim" style="font-size:12px;margin-top:9px">1,284 candidates · drop a CV, paste a screenshot, or forward to <span style="font-family:monospace;color:var(--teal2)">talentbridge@in.yoseh.com</span></div>
+          <div id="tp-understood" style="display:none;margin:14px 0 0"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:16px 0 12px">
+            <span class="dim" style="font-size:11.5px">Filter:</span>
+            <button class="fchip on" data-f="all" onclick="tpFilter('all',this)">All</button>
+            <button class="fchip" data-f="Replied" onclick="tpFilter('Replied',this)">Replied</button>
+            <button class="fchip" data-f="New" onclick="tpFilter('New',this)">New</button>
+            <button class="fchip" data-f="Placed" onclick="tpFilter('Placed',this)">Placed</button>
+            <button class="fchip" data-f="No reply" onclick="tpFilter('No reply',this)">No reply</button>
+            <span class="dim" style="font-size:11.5px;margin-left:auto" id="tp-count">1,284 candidates</span>
+          </div>
           <div id="talentlist"></div>
+          <div id="tp-empty" class="card" style="display:none;text-align:center;padding:26px"><div class="muted" style="font-size:13px">No matches. <span class="dim">Broaden by: drop “Mandarin”, widen location, or lower the year filter.</span></div></div>
         </section>
 
         <section class="view" id="v-parse" data-sec="talent">
@@ -147,18 +164,6 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
           <div id="p-done" style="opacity:.15;transition:opacity .4s;margin-top:13px;display:flex;align-items:center;gap:10px"><span class="cap ok"><i class="ti ti-circle-check"></i> 98% captured · 2 fields to confirm</span><span class="dim" style="font-size:11.5px">nothing was silently dropped</span><button class="btn teal" style="margin-left:auto" onclick="toast('Lee Jun Hao saved to pool');go('talent','Talent Pool')">Save to pool</button></div>
         </section>
 
-        <section class="view" id="v-search" data-sec="search">
-          <div class="muted" style="font-size:13px;margin-bottom:10px">One search bar — type like you're chatting, in any language (BM / EN / 中文 / தமிழ்)</div>
-          <input class="in" id="s-in" value="Cari jurutera Java di KL, 5+ tahun, boleh Mandarin"/>
-          <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="btn teal" onclick="search()"><i class="ti ti-search"></i>Search</button></div>
-          <div id="s-out" style="display:none;margin-top:16px">
-            <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:14px"><span class="dim" style="font-size:11.5px">Understood (canonical):</span><span class="chip tl">jurutera → software_engineer <i class="ti ti-x"></i></span><span class="chip tl">Java <i class="ti ti-x"></i></span><span class="chip tl">KL → kuala_lumpur <i class="ti ti-x"></i></span><span class="chip tl">5+ yrs <i class="ti ti-x"></i></span><span class="chip tl">Mandarin <i class="ti ti-x"></i></span></div>
-            <div class="row" onclick="openCand('Tan Wei Ming','Backend Engineer','Sourced','var(--blue)')"><div class="av" style="width:36px;height:36px;background:var(--blue);color:#fff;font-size:13px">TW</div><div style="flex:1"><div style="font-weight:600">Tan Wei Ming</div><div class="dim" style="font-size:12px">Backend Engineer · 7 yrs · KL · Mandarin</div></div><span class="badge" style="background:var(--tealt);color:var(--green)"><i class="ti ti-check"></i> exact</span></div>
-            <div style="font-size:11px;color:var(--teal2);margin:-4px 0 12px 4px"><i class="ti ti-info-circle"></i> Why a match? structured + lexical + semantic all fired · Java &amp; Mandarin canonical-matched</div>
-            <div class="row" onclick="openCand('Ravi Kumar','DevOps Engineer','Contacted','var(--teal)')"><div class="av" style="width:36px;height:36px;background:var(--teal);font-size:13px">RK</div><div style="flex:1"><div style="font-weight:600">Ravi Kumar</div><div class="dim" style="font-size:12px">DevOps Engineer · 6 yrs · KL</div></div><span class="badge" style="background:var(--card2);color:var(--mut)">~ similar</span></div>
-            <div class="row" onclick="openCand('Mei Ling Chong','Full-Stack Engineer','Sourced','var(--purple)')"><div class="av" style="width:36px;height:36px;background:var(--purple);color:#fff;font-size:13px">ML</div><div style="flex:1"><div style="font-weight:600">Mei Ling Chong</div><div class="dim" style="font-size:12px">Full-Stack Engineer · 5 yrs · PJ · Mandarin</div></div><span class="badge" style="background:var(--card2);color:var(--blue)">↗ semantic</span></div>
-          </div>
-        </section>
 
         <section class="view" id="v-pipelines" data-sec="pipelines">
           <div style="display:flex;align-items:center;justify-content:space-between"><div class="muted" style="font-size:13px">3 pipelines · 7 fixed stages each</div><button class="btn teal" onclick="toast('New pipeline')"><i class="ti ti-plus"></i>New Pipeline</button></div>
@@ -226,8 +231,24 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
   var stages=[['Sourced','var(--blue)',[['Tan Wei Ming','Backend Engineer','TW','New here','var(--green)',0]]],['Contacted','var(--teal2)',[['Aisha Rahman','Sales Executive','AR','3d · cooling off','var(--amber)',1],['Ravi Kumar','DevOps Engineer','RK','8d · sitting a while','var(--dim)',0]]],['Screened','var(--purple)',[['Priya Nair','Accountant','PN','1d · fresh','var(--green)',0]]],['Submitted','var(--amber)',[['Lim Chee Keong','Project Manager','LC','2d','var(--amber)',0]]],['Interview','var(--green)',[['Nurul Huda','UX Designer','NH','Fri 3pm','var(--green)',0]]]];
   document.getElementById('board').innerHTML=stages.map(function(s){var cards=s[2].map(function(c){var col=pal[c[2]]||'var(--teal)';return '<div class="ccard" onclick="openCand(\''+c[0]+'\',\''+c[1]+'\',\''+s[0]+'\',\''+col+'\')"><div style="display:flex;gap:9px;align-items:center">'+avHTML(c[0],col,30)+'<div style="min-width:0"><div style="font-weight:600;font-size:13px">'+c[0]+'</div><div class="dim" style="font-size:11px">'+c[1]+'</div></div></div><div style="display:flex;align-items:center;gap:6px;margin-top:9px;font-size:10.5px;color:var(--mut)"><span class="dot" style="background:'+c[4]+'"></span>'+c[3]+(c[5]?'<span style="margin-left:auto;color:var(--wa)"><i class="ti ti-brand-whatsapp"></i></span>':'')+'</div></div>';}).join('');return '<div class="col"><div style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;margin-bottom:11px"><span class="dot" style="background:'+s[1]+'"></span>'+s[0]+'<span class="dim" style="margin-left:auto">'+s[2].length+'</span></div>'+cards+'</div>';}).join('');
 
-  var talent=[['Aisha Rahman','Sales Executive · KL','AR','Replied','var(--green)','100%'],['Lee Jun Hao','Software Engineer · PJ','LJ','New','var(--amber)','98%'],['Priya Nair','Accountant · KL','PN','Placed','var(--green)','100%'],['Max Chew','Data Analyst · KL','MC','Sourced','var(--mut)','100%']];
-  document.getElementById('talentlist').innerHTML=talent.map(function(t){var col=pal[t[2]]||'var(--teal)';var bg=t[4]==='var(--green)'?'var(--tealt)':t[4]==='var(--amber)'?'var(--ambt)':'var(--card2)';var capcls=t[5]==='100%'?'cap ok':'cap';return '<div class="row" onclick="openCand(\''+t[0]+'\',\''+t[1]+'\',\'Sourced\',\''+col+'\')">'+avHTML(t[0],col,36)+'<div style="flex:1"><div style="font-weight:600">'+t[0]+'</div><div class="dim" style="font-size:12px">'+t[1]+'</div></div><span class="'+capcls+'">'+t[5]+' captured</span><span class="badge" style="background:'+bg+';color:'+t[4]+'">'+t[3]+'</span></div>';}).join('');
+  var talent=[
+    ['Tan Wei Ming','Backend Engineer · 7 yrs · KL · Mandarin','TW','New','var(--amber)','100%','exact'],
+    ['Aisha Rahman','Sales Executive · KL','AR','Replied','var(--green)','100%',''],
+    ['Lee Jun Hao','Software Engineer · 6 yrs · PJ · Mandarin','LJ','New','var(--amber)','98%','exact'],
+    ['Mei Ling Chong','Full-Stack Engineer · 5 yrs · PJ · Mandarin','ML','Sourced','var(--mut)','97%','semantic'],
+    ['Ravi Kumar','DevOps Engineer · 6 yrs · KL','RK','No reply','var(--mut)','98%','similar'],
+    ['Priya Nair','Accountant · KL','PN','Placed','var(--green)','100%',''],
+    ['Max Chew','Data Analyst · KL','MC','Sourced','var(--mut)','100%',''],
+    ['Nurul Huda','UX Designer · KL','NH','Interview','var(--teal2)','100%','']
+  ];
+  var tpMode='all',tpFilterVal='all';
+  function statusBg(c){return c==='var(--green)'?'var(--tealt)':c==='var(--amber)'?'var(--ambt)':'var(--card2)';}
+  function gradeBadge(g){if(g==='exact')return '<span class="badge" style="background:var(--tealt);color:var(--green)"><i class="ti ti-check"></i> exact</span>';if(g==='similar')return '<span class="badge" style="background:var(--card2);color:var(--mut)">~ similar</span>';return '<span class="badge" style="background:var(--card2);color:var(--blue)">↗ semantic</span>';}
+  window.renderTalent=function(){var list;if(tpMode==='search')list=talent.filter(function(t){return t[6];});else if(tpFilterVal!=='all')list=talent.filter(function(t){return t[3]===tpFilterVal;});else list=talent;document.getElementById('tp-empty').style.display=list.length?'none':'block';document.getElementById('talentlist').innerHTML=list.map(function(t){var col=pal[t[2]]||'var(--teal)';var right=tpMode==='search'?gradeBadge(t[6]):'<span class="badge" style="background:'+statusBg(t[4])+';color:'+t[4]+'">'+t[3]+'</span>';var capcls=t[5]==='100%'?'cap ok':'cap';return '<div class="row" onclick="openCand(\''+t[0]+'\',\''+t[1].split(' · ')[0]+'\',\'Sourced\',\''+col+'\')">'+avHTML(t[0],col,36)+'<div style="flex:1;min-width:0"><div style="font-weight:600">'+t[0]+'</div><div class="dim" style="font-size:12px">'+t[1]+'</div></div><span class="'+capcls+'">'+t[5]+'</span>'+right+'</div>';}).join('');document.getElementById('tp-count').textContent=tpMode==='search'?list.length+' matches':tpMode==='filter'?list.length+' shown':'1,284 candidates';};
+  window.tpFilter=function(f,el){tpMode=(f==='all')?'all':'filter';tpFilterVal=f;document.querySelectorAll('#v-talent .fchip[data-f]').forEach(function(b){b.classList.toggle('on',b===el);});document.getElementById('tp-understood').style.display='none';renderTalent();};
+  window.tpSearch=function(){var inp=document.getElementById('tp-in');if(!inp.value.trim())inp.value='jurutera Java di KL, 5+ tahun, boleh Mandarin';tpMode='search';document.querySelectorAll('#v-talent .fchip[data-f]').forEach(function(b){b.classList.remove('on');});var u=document.getElementById('tp-understood');u.style.display='block';u.innerHTML='<div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center"><span class="dim" style="font-size:11.5px">Understood (canonical):</span><span class="chip tl">jurutera → software_engineer</span><span class="chip tl">Java</span><span class="chip tl">KL → kuala_lumpur</span><span class="chip tl">5+ yrs</span><span class="chip tl">Mandarin</span><button class="fchip" style="margin-left:auto" onclick="tpClear()"><i class="ti ti-x"></i> Clear</button></div><div style="font-size:11px;color:var(--teal2);margin-top:8px"><i class="ti ti-info-circle"></i> Streaming · structured + lexical under 100ms, semantic ~500ms · plain states, never raw %</div>';renderTalent();toast('Streaming results · tap a chip to adjust');};
+  window.tpClear=function(){document.getElementById('tp-understood').style.display='none';tpMode='all';tpFilterVal='all';document.querySelectorAll('#v-talent .fchip[data-f]').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-f')==='all');});renderTalent();};
+  renderTalent();
 
   window.openCand=function(n,r,s,c){document.getElementById('c-nm').textContent=n;document.getElementById('c-ro').textContent=r;document.getElementById('c-stage').textContent=s;var a=document.getElementById('c-av');a.textContent=ini(n);a.style.background=c;a.style.color=darkText(c);go('candidate','Pipeline');};
   window.moveStage=function(){var seq=['Sourced','Contacted','Screened','Submitted','Interview','Offer','Placed'];var el=document.getElementById('c-stage');var i=seq.indexOf(el.textContent);if(i<seq.length-1){el.textContent=seq[i+1];toast('Moved to '+seq[i+1]+' — outcome capture triggered');}else{toast('Placed 🎉');}};
@@ -239,7 +260,6 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
   window.sendMsg=function(){var inp=document.getElementById('t-in');var t=inp.value.trim();if(!t)return;var m=document.getElementById('t-msgs');var d=document.createElement('div');d.style.cssText='display:flex;justify-content:flex-end;opacity:.5';d.innerHTML='<div class="bub" style="background:var(--wa);color:#053d1c">'+t.split('\n')[0]+'</div>';m.appendChild(d);m.scrollTop=m.scrollHeight;setTimeout(function(){d.style.opacity='1';d.querySelector('.bub').innerHTML+=' <i class="ti ti-checks" style="font-size:14px;vertical-align:-1px"></i>';toast('Sent · outbox-durable, idempotent');},800);};
   window.runParse=function(){['p-1','p-2','p-3','p-4','p-done'].forEach(function(id){document.getElementById(id).style.opacity='.15';});var st=document.getElementById('p-status');st.innerHTML='<i class="ti ti-loader-2"></i> Reading <span style="font-family:monospace;color:var(--fg)">Lee_CV_2026.pdf</span> … <span class="dim">(Claude 3 Haiku)</span>';['p-1','p-2','p-3','p-4'].forEach(function(id,i){setTimeout(function(){document.getElementById(id).style.opacity='1';},450*(i+1));});setTimeout(function(){document.getElementById('p-done').style.opacity='1';st.innerHTML='<span style="color:var(--teal2)"><i class="ti ti-circle-check"></i> Parsed in 2.1s · plain states, never raw %</span>';},450*5);};
   window.correctSkill=function(el){toast('Is this right? Currently "'+el.textContent.trim()+'" · pick a correction → teaches Yoseh ("Got it — I won\'t ask again")');};
-  window.search=function(){document.getElementById('s-out').style.display='block';toast('Streaming results · structured + lexical <100ms, semantic ~500ms');};
   window.setLang=function(l,el){document.querySelectorAll('#st-lang button').forEach(function(b){b.classList.remove('on');});el.classList.add('on');document.getElementById('st-demo').textContent='Outcome prompt preview: '+(l==='ms'?'"Adakah mereka membalas?"':'"Did they reply?"');};
 })();
 </script>
