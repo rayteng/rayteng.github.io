@@ -94,6 +94,18 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
 .dtab{flex:1;height:42px;border:none;background:transparent;color:var(--mut);font-weight:600;font-size:13px;font-family:inherit;cursor:pointer;border-bottom:2px solid transparent}
 .dtab.on{color:var(--teal2);border-bottom-color:var(--teal2)}
 .resume{background:#fff;color:#111;border-radius:8px;padding:22px;font-size:12px;line-height:1.5}
+.kcol{width:224px;flex:none;background:var(--side);border:1px solid var(--bd);border-radius:14px;padding:10px;display:flex;flex-direction:column;transition:background .15s,border-color .15s}
+.kcol.drop{border-color:var(--teal2);background:rgba(0,186,167,.07)}
+.khead{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;padding:4px 6px 11px}
+.kcount{margin-left:auto;font-size:12px;color:var(--dim);font-weight:600}
+.kcount.warn{color:var(--amber)}.kcount.over{color:var(--red)}
+.kbody{flex:1;min-height:64px;display:flex;flex-direction:column;gap:9px}
+.kcard{background:var(--card);border:1px solid var(--bd);border-radius:11px;padding:11px;cursor:grab;transition:opacity .12s,transform .12s,border-color .12s}
+.kcard:hover{border-color:var(--bd2);background:var(--card2)}
+.kcard:active{cursor:grabbing}
+.kcard.dragging{opacity:.35;transform:scale(.98)}
+.kempty{flex:1;border:1.5px dashed var(--bd);border-radius:10px;min-height:56px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--dim)}
+.kcol.drop .kempty{border-color:var(--teal2);color:var(--teal2)}
 </style>
 </head>
 <body>
@@ -216,7 +228,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
 
         <section class="view" id="v-board" data-sec="pipelines">
           <button class="back" onclick="go('pipelines','Pipeline')"><i class="ti ti-arrow-left"></i>Pipelines</button>
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div style="width:38px;height:38px;border-radius:11px;background:var(--tealt);display:flex;align-items:center;justify-content:center"><i class="ti ti-briefcase" style="color:var(--teal2);font-size:19px"></i></div><div><div class="h2">Senior Backend — Fintech</div><div class="dim" style="font-size:12px">Sourced → Contacted → Screened → Submitted → Interview → Offer → Placed</div></div></div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><div style="width:38px;height:38px;border-radius:11px;background:var(--tealt);display:flex;align-items:center;justify-content:center"><i class="ti ti-briefcase" style="color:var(--teal2);font-size:19px"></i></div><div style="flex:1"><div class="h2">Senior Backend — Fintech</div><div class="dim" style="font-size:12px">7 fixed stages · drag a card between columns to move a candidate</div></div><span class="dim" style="font-size:11.5px"><i class="ti ti-hand-finger" style="vertical-align:-2px"></i> drag &amp; drop</span></div>
           <div class="board" id="board"></div>
         </section>
 
@@ -310,8 +322,28 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
   var pipes=[['Senior Backend — Fintech','Go + PostgreSQL platform role for a regional fintech','var(--teal)','ti-briefcase',4],['Product Designer','End-to-end product designer for a Series A app','var(--purple)','ti-palette',3],['Growth Marketing Lead','Performance + content marketing for a D2C brand','var(--amber)','ti-trending-up',2]];
   document.getElementById('pipecards').innerHTML=pipes.map(function(p){return '<div class="card" style="padding:0;overflow:hidden;cursor:pointer" onclick="go(\'board\',\'Pipeline\')"><div style="height:3px;background:'+p[2]+'"></div><div style="padding:18px"><div style="width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--card2)"><i class="ti '+p[3]+'" style="font-size:21px;color:'+p[2]+'"></i></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px"><div class="h2" style="font-size:16px">'+p[0]+'</div><i class="ti ti-chevron-right dim"></i></div><div class="dim" style="font-size:12.5px;margin-top:4px">'+p[1]+'</div><div style="display:flex;align-items:center;gap:7px;margin-top:14px;padding-top:13px;border-top:1px solid var(--bd)"><i class="ti ti-users dim" style="font-size:15px"></i><span class="muted" style="font-size:12.5px">'+p[4]+' candidates</span></div></div></div>';}).join('');
 
-  var stages=[['Sourced','var(--blue)',[['Tan Wei Ming','Backend Engineer','TW','New here','var(--green)',0]]],['Contacted','var(--teal2)',[['Aisha Rahman','Sales Executive','AR','3d · cooling off','var(--amber)',1],['Ravi Kumar','DevOps Engineer','RK','8d · sitting a while','var(--dim)',0]]],['Screened','var(--purple)',[['Priya Nair','Accountant','PN','1d · fresh','var(--green)',0]]],['Submitted','var(--amber)',[['Lim Chee Keong','Project Manager','LC','2d','var(--amber)',0]]],['Interview','var(--green)',[['Nurul Huda','UX Designer','NH','Fri 3pm','var(--green)',0]]]];
-  document.getElementById('board').innerHTML=stages.map(function(s){var cards=s[2].map(function(c){var col=pal[c[2]]||'var(--teal)';return '<div class="ccard" onclick="openCand(\''+c[0]+'\',\''+c[1]+'\',\''+s[0]+'\',\''+col+'\')"><div style="display:flex;gap:9px;align-items:center">'+avHTML(c[0],col,30)+'<div style="min-width:0"><div style="font-weight:600;font-size:13px">'+c[0]+'</div><div class="dim" style="font-size:11px">'+c[1]+'</div></div></div><div style="display:flex;align-items:center;gap:6px;margin-top:9px;font-size:10.5px;color:var(--mut)"><span class="dot" style="background:'+c[4]+'"></span>'+c[3]+(c[5]?'<span style="margin-left:auto;color:var(--wa)"><i class="ti ti-brand-whatsapp"></i></span>':'')+'</div></div>';}).join('');return '<div class="col"><div style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;margin-bottom:11px"><span class="dot" style="background:'+s[1]+'"></span>'+s[0]+'<span class="dim" style="margin-left:auto">'+s[2].length+'</span></div>'+cards+'</div>';}).join('');
+  var BOARD=[
+    {id:'b1',name:'Tan Wei Ming',role:'Backend Engineer',stage:'Sourced',heat:'New here',heatc:'var(--green)',wa:0,col:'var(--blue)'},
+    {id:'b10',name:'Siti Aminah',role:'Data Analyst',stage:'Sourced',heat:'New here',heatc:'var(--green)',wa:0,col:'var(--amber)'},
+    {id:'b2',name:'Aisha Rahman',role:'Sales Executive',stage:'Contacted',heat:'3d · cooling off',heatc:'var(--amber)',wa:1,col:'var(--purple)'},
+    {id:'b3',name:'Ravi Kumar',role:'DevOps Engineer',stage:'Contacted',heat:'8d · sitting a while',heatc:'var(--dim)',wa:0,col:'var(--teal)'},
+    {id:'b4',name:'Priya Nair',role:'Accountant',stage:'Screened',heat:'1d · fresh',heatc:'var(--green)',wa:0,col:'var(--green)'},
+    {id:'b8',name:'Lee Jun Hao',role:'Software Engineer',stage:'Screened',heat:'2d',heatc:'var(--amber)',wa:1,col:'var(--teal)'},
+    {id:'b5',name:'Lim Chee Keong',role:'Project Manager',stage:'Submitted',heat:'2d',heatc:'var(--amber)',wa:0,col:'var(--blue)'},
+    {id:'b6',name:'Nurul Huda',role:'UX Designer',stage:'Interview',heat:'Fri 3pm',heatc:'var(--green)',wa:0,col:'var(--red)'},
+    {id:'b7',name:'Faiz Zikri',role:'Backend Engineer',stage:'Offer',heat:'1d',heatc:'var(--green)',wa:0,col:'var(--amber)'},
+    {id:'b9',name:'Max Chew',role:'Data Analyst',stage:'Placed',heat:'Placed',heatc:'var(--green)',wa:0,col:'var(--blue)'}
+  ];
+  var WIP={'Interview':2,'Offer':2};
+  function kcard(c){return '<div class="kcard" draggable="true" ondragstart="dragStart(event,\''+c.id+'\')" ondragend="dragEnd(event)" onclick="openCand(\''+c.name+'\',\''+c.role+'\',\''+c.stage+'\',\''+c.col+'\')"><div style="display:flex;gap:9px;align-items:center">'+avHTML(c.name,c.col,30)+'<div style="min-width:0"><div style="font-weight:600;font-size:13px">'+c.name+'</div><div class="dim" style="font-size:11px">'+c.role+'</div></div></div><div style="display:flex;align-items:center;gap:6px;margin-top:9px;font-size:10.5px;color:var(--mut)"><span class="dot" style="background:'+c.heatc+'"></span>'+c.heat+(c.wa?'<span style="margin-left:auto;color:var(--wa)"><i class="ti ti-brand-whatsapp"></i></span>':'')+'</div></div>';}
+  window.renderBoard=function(){document.getElementById('board').innerHTML=STAGES.map(function(s){var cards=BOARD.filter(function(c){return c.stage===s;});var cap=WIP[s];var cls=cap?(cards.length>cap?'over':(cards.length===cap?'warn':'')):'';var inner=cards.length?cards.map(kcard).join(''):'<div class="kempty">Drop here</div>';return '<div class="kcol" ondragover="dragOver(event,this)" ondragleave="dragLeave(event,this)" ondrop="boardDrop(event,\''+s+'\')"><div class="khead"><span class="dot" style="background:'+stageCol(s)+'"></span>'+s+'<span class="kcount '+cls+'">'+cards.length+(cap?' / '+cap:'')+'</span></div><div class="kbody">'+inner+'</div></div>';}).join('');};
+  var dragId=null;
+  window.dragStart=function(e,id){dragId=id;e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',id);}catch(_){ }e.currentTarget.classList.add('dragging');};
+  window.dragEnd=function(e){e.currentTarget.classList.remove('dragging');document.querySelectorAll('.kcol.drop').forEach(function(x){x.classList.remove('drop');});dragId=null;};
+  window.dragOver=function(e,el){e.preventDefault();e.dataTransfer.dropEffect='move';el.classList.add('drop');};
+  window.dragLeave=function(e,el){if(!el.contains(e.relatedTarget))el.classList.remove('drop');};
+  window.boardDrop=function(e,stage){e.preventDefault();document.querySelectorAll('.kcol.drop').forEach(function(x){x.classList.remove('drop');});var id=dragId||(e.dataTransfer&&e.dataTransfer.getData('text/plain'));var c=BOARD.filter(function(x){return x.id===id;})[0];if(c&&c.stage!==stage){var from=c.stage;c.stage=stage;c.heat=(stage==='Placed'?'Placed':'just moved');c.heatc=(stage==='Placed'?'var(--green)':'var(--teal2)');renderBoard();toast('Moved '+c.name.split(' ')[0]+': '+from+' → '+stage+' · outcome capture triggered');}dragId=null;};
+  renderBoard();
 
   var RD={
     'Backend Engineer':{sk:['Go','Java','PostgreSQL','Redis','Kubernetes','gRPC','AWS','Kafka'],co:['Grab','Shopee','BigPay','iPay88','Setel'],ed:'B.Sc. Computer Science — Universiti Malaya',su:'Backend engineer focused on high-scale distributed systems and payments infrastructure.',bl:['Led a payments service handling 2M+ daily transactions; cut p99 latency 40%.','Designed event-driven microservices on Kubernetes serving 10M+ users.']},
