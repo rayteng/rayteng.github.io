@@ -66,7 +66,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .scroll::-webkit-scrollbar{width:10px}.scroll::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:10px}
-.board{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px}
+.board{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;height:calc(100vh - 252px);min-height:420px;align-items:stretch}
 .col{width:210px;flex:none}
 .ccard{background:var(--card);border:1px solid var(--bd);border-radius:13px;padding:12px;margin-bottom:10px;cursor:pointer}
 .ccard:hover{border-color:var(--bd2);background:var(--card2)}
@@ -94,18 +94,29 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
 .dtab{flex:1;height:42px;border:none;background:transparent;color:var(--mut);font-weight:600;font-size:13px;font-family:inherit;cursor:pointer;border-bottom:2px solid transparent}
 .dtab.on{color:var(--teal2);border-bottom-color:var(--teal2)}
 .resume{background:#fff;color:#111;border-radius:8px;padding:22px;font-size:12px;line-height:1.5}
-.kcol{width:224px;flex:none;background:var(--side);border:1px solid var(--bd);border-radius:14px;padding:10px;display:flex;flex-direction:column;transition:background .15s,border-color .15s}
-.kcol.drop{border-color:var(--teal2);background:rgba(0,186,167,.07)}
-.khead{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;padding:4px 6px 11px}
-.kcount{margin-left:auto;font-size:12px;color:var(--dim);font-weight:600}
+.kcol{width:280px;flex:none;background:var(--side);border:1px solid var(--bd);border-radius:14px;display:flex;flex-direction:column;overflow:hidden;transition:border-color .15s}
+.kcol.drop{border-color:var(--teal2)}
+.kcol.drop .kbody{background:rgba(0,186,167,.05)}
+.khead{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;padding:13px 14px;border-bottom:1px solid var(--bd)}
+.kcount{font-size:12px;color:var(--dim);font-weight:600;background:var(--mut);background:var(--card2);border-radius:999px;padding:2px 9px}
 .kcount.warn{color:var(--amber)}.kcount.over{color:var(--red)}
-.kbody{flex:1;min-height:64px;display:flex;flex-direction:column;gap:9px}
+.kcap{font-size:16px;cursor:pointer;color:var(--dim)}.kcap:hover{color:var(--fg)}
+.kbody{flex:1;min-height:0;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;transition:background .15s}
+.kbody::-webkit-scrollbar{width:8px}.kbody::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:8px}
+.kfoot{padding:10px 12px;border-top:1px solid var(--bd)}
+.kaddbtn{width:100%;height:36px;border:1px dashed var(--bd2);background:transparent;color:var(--mut);border-radius:9px;font-size:12.5px;font-weight:500;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.kaddbtn:hover{border-color:var(--teal2);color:var(--teal2)}
 .kcard{background:var(--card);border:1px solid var(--bd);border-radius:11px;padding:11px;cursor:grab;transition:opacity .12s,transform .12s,border-color .12s}
 .kcard:hover{border-color:var(--bd2);background:var(--card2)}
 .kcard:active{cursor:grabbing}
-.kcard.dragging{opacity:.35;transform:scale(.98)}
-.kempty{flex:1;border:1.5px dashed var(--bd);border-radius:10px;min-height:56px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--dim)}
+.kcard.dragging{opacity:.3;transform:scale(.97)}
+.kempty{flex:1;border:1.5px dashed var(--bd);border-radius:10px;min-height:80px;display:flex;align-items:center;justify-content:center;font-size:11.5px;color:var(--dim)}
 .kcol.drop .kempty{border-color:var(--teal2);color:var(--teal2)}
+.kplace{height:3px;background:var(--teal2);border-radius:3px;margin:1px 0;box-shadow:0 0 8px rgba(45,212,191,.5)}
+.kcol.collapsed{width:52px}
+.kcolc{flex:1;display:flex;flex-direction:column;align-items:center;gap:12px;padding:14px 0;cursor:pointer}
+.kcolc .vert{writing-mode:vertical-rl;transform:rotate(180deg);font-size:12.5px;font-weight:600;color:var(--mut)}
+.kmeta{display:flex;align-items:center;gap:6px;margin-top:9px;font-size:10.5px;color:var(--mut)}
 </style>
 </head>
 <body>
@@ -335,14 +346,18 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
     {id:'b9',name:'Max Chew',role:'Data Analyst',stage:'Placed',heat:'Placed',heatc:'var(--green)',wa:0,col:'var(--blue)'}
   ];
   var WIP={'Interview':2,'Offer':2};
-  function kcard(c){return '<div class="kcard" draggable="true" ondragstart="dragStart(event,\''+c.id+'\')" ondragend="dragEnd(event)" onclick="openCand(\''+c.name+'\',\''+c.role+'\',\''+c.stage+'\',\''+c.col+'\')"><div style="display:flex;gap:9px;align-items:center">'+avHTML(c.name,c.col,30)+'<div style="min-width:0"><div style="font-weight:600;font-size:13px">'+c.name+'</div><div class="dim" style="font-size:11px">'+c.role+'</div></div></div><div style="display:flex;align-items:center;gap:6px;margin-top:9px;font-size:10.5px;color:var(--mut)"><span class="dot" style="background:'+c.heatc+'"></span>'+c.heat+(c.wa?'<span style="margin-left:auto;color:var(--wa)"><i class="ti ti-brand-whatsapp"></i></span>':'')+'</div></div>';}
-  window.renderBoard=function(){document.getElementById('board').innerHTML=STAGES.map(function(s){var cards=BOARD.filter(function(c){return c.stage===s;});var cap=WIP[s];var cls=cap?(cards.length>cap?'over':(cards.length===cap?'warn':'')):'';var inner=cards.length?cards.map(kcard).join(''):'<div class="kempty">Drop here</div>';return '<div class="kcol" ondragover="dragOver(event,this)" ondragleave="dragLeave(event,this)" ondrop="boardDrop(event,\''+s+'\')"><div class="khead"><span class="dot" style="background:'+stageCol(s)+'"></span>'+s+'<span class="kcount '+cls+'">'+cards.length+(cap?' / '+cap:'')+'</span></div><div class="kbody">'+inner+'</div></div>';}).join('');};
+  var collapsed={};
+  function kcard(c){return '<div class="kcard" draggable="true" data-id="'+c.id+'" ondragstart="dragStart(event,\''+c.id+'\')" ondragend="dragEnd(event)" onclick="openCand(\''+c.name+'\',\''+c.role+'\',\''+c.stage+'\',\''+c.col+'\')"><div style="display:flex;gap:9px;align-items:center">'+avHTML(c.name,c.col,32)+'<div style="min-width:0"><div style="font-weight:600;font-size:13px">'+c.name+'</div><div class="dim" style="font-size:11px">'+c.role+'</div></div></div><div class="kmeta"><span class="dot" style="background:'+c.heatc+'"></span>'+c.heat+'<span style="margin-left:auto;display:flex;align-items:center;gap:7px">'+(c.wa?'<span style="color:var(--wa)"><i class="ti ti-brand-whatsapp"></i></span>':'')+'<span class="av" style="width:18px;height:18px;font-size:8px;background:var(--purple);color:#fff" title="Owner: Aisha">AR</span></span></div></div>';}
+  window.renderBoard=function(){var total=BOARD.length;document.getElementById('board').innerHTML=STAGES.map(function(s){var cards=BOARD.filter(function(c){return c.stage===s;});if(collapsed[s]){return '<div class="kcol collapsed"><div class="kcolc" onclick="toggleCol(\''+s+'\')"><i class="ti ti-chevron-right kcap"></i><span class="dot" style="background:'+stageCol(s)+'"></span><span class="vert">'+s+'</span><span class="kcount">'+cards.length+'</span></div></div>';}var cap=WIP[s];var cls=cap?(cards.length>cap?'over':(cards.length===cap?'warn':'')):'';var inner=cards.length?cards.map(kcard).join(''):'<div class="kempty">Drop a candidate here</div>';return '<div class="kcol" ondragover="dragOver(event,this)" ondragleave="dragLeave(event,this)" ondrop="boardDrop(event,\''+s+'\')"><div class="khead"><span class="dot" style="background:'+stageCol(s)+'"></span><span>'+s+'</span><span class="kcount '+cls+'" style="margin-left:auto">'+cards.length+(cap?' / '+cap:'')+'</span><i class="ti ti-layout-sidebar-left-collapse kcap" onclick="toggleCol(\''+s+'\')" title="Collapse"></i></div><div class="kbody">'+inner+'</div><div class="kfoot"><button class="kaddbtn" onclick="addCard(\''+s+'\')"><i class="ti ti-plus"></i>Add candidate</button></div></div>';}).join('');};
   var dragId=null;
-  window.dragStart=function(e,id){dragId=id;e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',id);}catch(_){ }e.currentTarget.classList.add('dragging');};
-  window.dragEnd=function(e){e.currentTarget.classList.remove('dragging');document.querySelectorAll('.kcol.drop').forEach(function(x){x.classList.remove('drop');});dragId=null;};
-  window.dragOver=function(e,el){e.preventDefault();e.dataTransfer.dropEffect='move';el.classList.add('drop');};
-  window.dragLeave=function(e,el){if(!el.contains(e.relatedTarget))el.classList.remove('drop');};
-  window.boardDrop=function(e,stage){e.preventDefault();document.querySelectorAll('.kcol.drop').forEach(function(x){x.classList.remove('drop');});var id=dragId||(e.dataTransfer&&e.dataTransfer.getData('text/plain'));var c=BOARD.filter(function(x){return x.id===id;})[0];if(c&&c.stage!==stage){var from=c.stage;c.stage=stage;c.heat=(stage==='Placed'?'Placed':'just moved');c.heatc=(stage==='Placed'?'var(--green)':'var(--teal2)');renderBoard();toast('Moved '+c.name.split(' ')[0]+': '+from+' → '+stage+' · outcome capture triggered');}dragId=null;};
+  function clearPH(){var p=document.getElementById('kplace');if(p)p.remove();}
+  window.dragStart=function(e,id){dragId=id;e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',id);}catch(_){ }var t=e.currentTarget;setTimeout(function(){t.classList.add('dragging');},0);};
+  window.dragEnd=function(e){var d=document.querySelector('.kcard.dragging');if(d)d.classList.remove('dragging');document.querySelectorAll('.kcol.drop').forEach(function(x){x.classList.remove('drop');});clearPH();dragId=null;};
+  window.dragOver=function(e,col){e.preventDefault();e.dataTransfer.dropEffect='move';col.classList.add('drop');var body=col.querySelector('.kbody');if(!body)return;var cards=[].slice.call(body.querySelectorAll('.kcard:not(.dragging)'));var ph=document.getElementById('kplace');if(!ph){ph=document.createElement('div');ph.id='kplace';ph.className='kplace';}var idx=cards.length;for(var i=0;i<cards.length;i++){var r=cards[i].getBoundingClientRect();if(e.clientY<r.top+r.height/2){idx=i;break;}}if(idx>=cards.length)body.appendChild(ph);else body.insertBefore(ph,cards[idx]);};
+  window.dragLeave=function(e,col){if(!col.contains(e.relatedTarget))col.classList.remove('drop');};
+  window.boardDrop=function(e,stage){e.preventDefault();var col=e.currentTarget;col.classList.remove('drop');var ph=document.getElementById('kplace');var idx=0;if(ph){var n=ph.previousElementSibling;while(n){if(n.classList&&n.classList.contains('kcard'))idx++;n=n.previousElementSibling;}}var id=dragId||(e.dataTransfer&&e.dataTransfer.getData('text/plain'));clearPH();var ci=-1;for(var k=0;k<BOARD.length;k++){if(BOARD[k].id===id){ci=k;break;}}if(ci<0){dragId=null;return;}var c=BOARD[ci];var from=c.stage;BOARD.splice(ci,1);c.stage=stage;if(from!==stage){c.heat=(stage==='Placed'?'Placed':'just moved');c.heatc=(stage==='Placed'?'var(--green)':'var(--teal2)');}var stageCards=BOARD.filter(function(x){return x.stage===stage;});var g;if(idx>=stageCards.length){g=stageCards.length?BOARD.indexOf(stageCards[stageCards.length-1])+1:BOARD.length;}else{g=BOARD.indexOf(stageCards[idx]);}BOARD.splice(g,0,c);renderBoard();toast(from!==stage?('Moved '+c.name.split(' ')[0]+': '+from+' → '+stage+' · capture triggered'):('Reordered '+c.name.split(' ')[0]+' in '+stage));dragId=null;};
+  window.toggleCol=function(s){collapsed[s]=!collapsed[s];renderBoard();};
+  window.addCard=function(s){toast('Add to '+s+' — pick from Talent Pool or paste a CV');};
 
   var RD={
     'Backend Engineer':{sk:['Go','Java','PostgreSQL','Redis','Kubernetes','gRPC','AWS','Kafka'],co:['Grab','Shopee','BigPay','iPay88','Setel'],ed:'B.Sc. Computer Science — Universiti Malaya',su:'Backend engineer focused on high-scale distributed systems and payments infrastructure.',bl:['Led a payments service handling 2M+ daily transactions; cut p99 latency 40%.','Designed event-driven microservices on Kubernetes serving 10M+ users.']},
