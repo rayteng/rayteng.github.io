@@ -309,7 +309,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
   function darkText(c){return (c==='var(--purple)'||c==='var(--red)'||c==='var(--blue)')?'#fff':'#0a0a0a';}
   function ini(n){var p=n.split(' ');return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();}
   function avHTML(n,c,sz){return '<div class="av" style="width:'+sz+'px;height:'+sz+'px;background:'+c+';font-size:'+(sz/2.6)+'px;color:'+darkText(c)+'">'+ini(n)+'</div>';}
-  window.go=function(sec,title){var id='v-'+sec;for(var k in views)views[k].classList.remove('on');if(views[id])views[id].classList.add('on');document.getElementById('ptitle').textContent=title;var hi=(sec==='board'||sec==='candidate')?'pipelines':(sec==='thread')?'inbox':(sec==='parse')?'talent':sec;document.querySelectorAll('.nav').forEach(function(n){n.classList.toggle('on',n.getAttribute('data-sec')===hi);});document.querySelector('.scroll').scrollTop=0;if(sec==='parse')runParse();};
+  window.go=function(sec,title){var id='v-'+sec;for(var k in views)views[k].classList.remove('on');if(views[id])views[id].classList.add('on');document.getElementById('ptitle').textContent=title;var hi=(sec==='board'||sec==='candidate')?'pipelines':(sec==='thread')?'inbox':(sec==='parse')?'talent':sec;document.querySelectorAll('.nav').forEach(function(n){n.classList.toggle('on',n.getAttribute('data-sec')===hi);});document.querySelector('.scroll').scrollTop=0;if(sec==='parse')runParse();if(sec==='board')renderBoard();};
   window.toast=function(m){var t=document.getElementById('toast');t.querySelector('span').textContent=m;t.style.display='flex';clearTimeout(t._h);t._h=setTimeout(function(){t.style.display='none';},2400);};
 
   var batons=[['Aisha Rahman','AR','Sales Executive · messaged 3 days ago'],['Ravi Kumar','RK','DevOps Engineer · messaged 8 days ago — overdue'],['Siti Rahman','SR','UX Designer · messaged 2 days ago']];
@@ -343,7 +343,6 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
   window.dragOver=function(e,el){e.preventDefault();e.dataTransfer.dropEffect='move';el.classList.add('drop');};
   window.dragLeave=function(e,el){if(!el.contains(e.relatedTarget))el.classList.remove('drop');};
   window.boardDrop=function(e,stage){e.preventDefault();document.querySelectorAll('.kcol.drop').forEach(function(x){x.classList.remove('drop');});var id=dragId||(e.dataTransfer&&e.dataTransfer.getData('text/plain'));var c=BOARD.filter(function(x){return x.id===id;})[0];if(c&&c.stage!==stage){var from=c.stage;c.stage=stage;c.heat=(stage==='Placed'?'Placed':'just moved');c.heatc=(stage==='Placed'?'var(--green)':'var(--teal2)');renderBoard();toast('Moved '+c.name.split(' ')[0]+': '+from+' → '+stage+' · outcome capture triggered');}dragId=null;};
-  renderBoard();
 
   var RD={
     'Backend Engineer':{sk:['Go','Java','PostgreSQL','Redis','Kubernetes','gRPC','AWS','Kafka'],co:['Grab','Shopee','BigPay','iPay88','Setel'],ed:'B.Sc. Computer Science — Universiti Malaya',su:'Backend engineer focused on high-scale distributed systems and payments infrastructure.',bl:['Led a payments service handling 2M+ daily transactions; cut p99 latency 40%.','Designed event-driven microservices on Kubernetes serving 10M+ users.']},
