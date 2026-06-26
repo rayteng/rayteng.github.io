@@ -117,6 +117,20 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
 .kcolc{flex:1;display:flex;flex-direction:column;align-items:center;gap:12px;padding:14px 0;cursor:pointer}
 .kcolc .vert{writing-mode:vertical-rl;transform:rotate(180deg);font-size:12.5px;font-weight:600;color:var(--mut)}
 .kmeta{display:flex;align-items:center;gap:6px;margin-top:9px;font-size:10.5px;color:var(--mut)}
+.btoolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.kstat{font-size:10.5px;color:var(--dim);padding:0 14px 9px;margin-top:-2px}
+.kcard{position:relative}
+.kcard:focus{outline:2px solid var(--teal2);outline-offset:1px}
+.kqa{position:absolute;top:8px;right:8px;display:none;gap:5px;z-index:2}
+.kcard:hover .kqa{display:flex}
+.kqa button{width:26px;height:26px;border:1px solid var(--bd2);background:var(--bg);color:var(--mut);border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;padding:0}
+.kqa button:hover{color:var(--teal2);border-color:var(--teal2);background:var(--card2)}
+.board.grouped{height:auto;min-height:0;display:block;overflow-x:hidden;align-items:initial}
+.swim{margin-bottom:18px}
+.swimhead{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;padding:6px 2px 10px}
+.binner{display:flex;gap:14px;overflow-x:auto;align-items:flex-start;padding-bottom:6px}
+.kcol.mini .kbody{max-height:300px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
 <body>
@@ -239,8 +253,16 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
 
         <section class="view" id="v-board" data-sec="pipelines">
           <button class="back" onclick="go('pipelines','Pipeline')"><i class="ti ti-arrow-left"></i>Pipelines</button>
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><div style="width:38px;height:38px;border-radius:11px;background:var(--tealt);display:flex;align-items:center;justify-content:center"><i class="ti ti-briefcase" style="color:var(--teal2);font-size:19px"></i></div><div style="flex:1"><div class="h2">Senior Backend — Fintech</div><div class="dim" style="font-size:12px">7 fixed stages · drag a card between columns to move a candidate</div></div><span class="dim" style="font-size:11.5px"><i class="ti ti-hand-finger" style="vertical-align:-2px"></i> drag &amp; drop</span></div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><div style="width:38px;height:38px;border-radius:11px;background:var(--tealt);display:flex;align-items:center;justify-content:center"><i class="ti ti-briefcase" style="color:var(--teal2);font-size:19px"></i></div><div style="flex:1"><div class="h2">Senior Backend — Fintech</div><div class="dim" style="font-size:12px">7 fixed stages · drag, or focus a card and use arrow keys, to move a candidate</div></div></div>
+          <div class="btoolbar">
+            <div class="tpsearch" style="max-width:260px;flex:none;width:260px"><i class="ti ti-search"></i><input class="in" id="bsearch" placeholder="Search this board…" oninput="renderBoard()"/></div>
+            <span class="dim" style="font-size:11.5px">Group</span>
+            <div class="seg" style="height:32px"><button class="on" id="grp-none" onclick="setGroup('none')">None</button><button id="grp-owner" onclick="setGroup('owner')">Owner</button><button id="grp-role" onclick="setGroup('role')">Role</button></div>
+            <select class="in" id="ownerf" style="width:auto;height:32px;padding:0 8px" onchange="renderBoard()"><option value="all">All owners</option><option>Aisha</option><option>Bob</option><option>Mei</option></select>
+            <span class="dim" style="font-size:11.5px;margin-left:auto" id="bcount"></span>
+          </div>
           <div class="board" id="board"></div>
+          <div id="sr-live" aria-live="polite" class="sr-only"></div>
         </section>
 
         <section class="view" id="v-candidate" data-sec="pipelines">
@@ -334,28 +356,56 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-s
   document.getElementById('pipecards').innerHTML=pipes.map(function(p){return '<div class="card" style="padding:0;overflow:hidden;cursor:pointer" onclick="go(\'board\',\'Pipeline\')"><div style="height:3px;background:'+p[2]+'"></div><div style="padding:18px"><div style="width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--card2)"><i class="ti '+p[3]+'" style="font-size:21px;color:'+p[2]+'"></i></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px"><div class="h2" style="font-size:16px">'+p[0]+'</div><i class="ti ti-chevron-right dim"></i></div><div class="dim" style="font-size:12.5px;margin-top:4px">'+p[1]+'</div><div style="display:flex;align-items:center;gap:7px;margin-top:14px;padding-top:13px;border-top:1px solid var(--bd)"><i class="ti ti-users dim" style="font-size:15px"></i><span class="muted" style="font-size:12.5px">'+p[4]+' candidates</span></div></div></div>';}).join('');
 
   var BOARD=[
-    {id:'b1',name:'Tan Wei Ming',role:'Backend Engineer',stage:'Sourced',heat:'New here',heatc:'var(--green)',wa:0,col:'var(--blue)'},
-    {id:'b10',name:'Siti Aminah',role:'Data Analyst',stage:'Sourced',heat:'New here',heatc:'var(--green)',wa:0,col:'var(--amber)'},
-    {id:'b2',name:'Aisha Rahman',role:'Sales Executive',stage:'Contacted',heat:'3d · cooling off',heatc:'var(--amber)',wa:1,col:'var(--purple)'},
-    {id:'b3',name:'Ravi Kumar',role:'DevOps Engineer',stage:'Contacted',heat:'8d · sitting a while',heatc:'var(--dim)',wa:0,col:'var(--teal)'},
-    {id:'b4',name:'Priya Nair',role:'Accountant',stage:'Screened',heat:'1d · fresh',heatc:'var(--green)',wa:0,col:'var(--green)'},
-    {id:'b8',name:'Lee Jun Hao',role:'Software Engineer',stage:'Screened',heat:'2d',heatc:'var(--amber)',wa:1,col:'var(--teal)'},
-    {id:'b5',name:'Lim Chee Keong',role:'Project Manager',stage:'Submitted',heat:'2d',heatc:'var(--amber)',wa:0,col:'var(--blue)'},
-    {id:'b6',name:'Nurul Huda',role:'UX Designer',stage:'Interview',heat:'Fri 3pm',heatc:'var(--green)',wa:0,col:'var(--red)'},
-    {id:'b7',name:'Faiz Zikri',role:'Backend Engineer',stage:'Offer',heat:'1d',heatc:'var(--green)',wa:0,col:'var(--amber)'},
-    {id:'b9',name:'Max Chew',role:'Data Analyst',stage:'Placed',heat:'Placed',heatc:'var(--green)',wa:0,col:'var(--blue)'}
+    {id:'b1',name:'Tan Wei Ming',role:'Backend Engineer',stage:'Sourced',heat:'New here',heatc:'var(--green)',wa:0,col:'var(--blue)',owner:'Aisha',days:1},
+    {id:'b10',name:'Siti Aminah',role:'Data Analyst',stage:'Sourced',heat:'New here',heatc:'var(--green)',wa:0,col:'var(--amber)',owner:'Bob',days:1},
+    {id:'b2',name:'Aisha Rahman',role:'Sales Executive',stage:'Contacted',heat:'3d · cooling off',heatc:'var(--amber)',wa:1,col:'var(--purple)',owner:'Aisha',days:3},
+    {id:'b3',name:'Ravi Kumar',role:'DevOps Engineer',stage:'Contacted',heat:'8d · sitting a while',heatc:'var(--dim)',wa:0,col:'var(--teal)',owner:'Mei',days:8},
+    {id:'b4',name:'Priya Nair',role:'Accountant',stage:'Screened',heat:'1d · fresh',heatc:'var(--green)',wa:0,col:'var(--green)',owner:'Bob',days:1},
+    {id:'b8',name:'Lee Jun Hao',role:'Software Engineer',stage:'Screened',heat:'2d',heatc:'var(--amber)',wa:1,col:'var(--teal)',owner:'Aisha',days:2},
+    {id:'b5',name:'Lim Chee Keong',role:'Project Manager',stage:'Submitted',heat:'2d',heatc:'var(--amber)',wa:0,col:'var(--blue)',owner:'Mei',days:2},
+    {id:'b6',name:'Nurul Huda',role:'UX Designer',stage:'Interview',heat:'Fri 3pm',heatc:'var(--green)',wa:0,col:'var(--red)',owner:'Aisha',days:4},
+    {id:'b7',name:'Faiz Zikri',role:'Backend Engineer',stage:'Offer',heat:'1d',heatc:'var(--green)',wa:0,col:'var(--amber)',owner:'Bob',days:1},
+    {id:'b9',name:'Max Chew',role:'Data Analyst',stage:'Placed',heat:'Placed',heatc:'var(--green)',wa:0,col:'var(--blue)',owner:'Mei',days:6}
   ];
   var WIP={'Interview':2,'Offer':2};
-  var collapsed={};
-  function kcard(c){return '<div class="kcard" draggable="true" data-id="'+c.id+'" ondragstart="dragStart(event,\''+c.id+'\')" ondragend="dragEnd(event)" onclick="openCand(\''+c.name+'\',\''+c.role+'\',\''+c.stage+'\',\''+c.col+'\')"><div style="display:flex;gap:9px;align-items:center">'+avHTML(c.name,c.col,32)+'<div style="min-width:0"><div style="font-weight:600;font-size:13px">'+c.name+'</div><div class="dim" style="font-size:11px">'+c.role+'</div></div></div><div class="kmeta"><span class="dot" style="background:'+c.heatc+'"></span>'+c.heat+'<span style="margin-left:auto;display:flex;align-items:center;gap:7px">'+(c.wa?'<span style="color:var(--wa)"><i class="ti ti-brand-whatsapp"></i></span>':'')+'<span class="av" style="width:18px;height:18px;font-size:8px;background:var(--purple);color:#fff" title="Owner: Aisha">AR</span></span></div></div>';}
-  window.renderBoard=function(){var total=BOARD.length;document.getElementById('board').innerHTML=STAGES.map(function(s){var cards=BOARD.filter(function(c){return c.stage===s;});if(collapsed[s]){return '<div class="kcol collapsed"><div class="kcolc" onclick="toggleCol(\''+s+'\')"><i class="ti ti-chevron-right kcap"></i><span class="dot" style="background:'+stageCol(s)+'"></span><span class="vert">'+s+'</span><span class="kcount">'+cards.length+'</span></div></div>';}var cap=WIP[s];var cls=cap?(cards.length>cap?'over':(cards.length===cap?'warn':'')):'';var inner=cards.length?cards.map(kcard).join(''):'<div class="kempty">Drop a candidate here</div>';return '<div class="kcol" ondragover="dragOver(event,this)" ondragleave="dragLeave(event,this)" ondrop="boardDrop(event,\''+s+'\')"><div class="khead"><span class="dot" style="background:'+stageCol(s)+'"></span><span>'+s+'</span><span class="kcount '+cls+'" style="margin-left:auto">'+cards.length+(cap?' / '+cap:'')+'</span><i class="ti ti-layout-sidebar-left-collapse kcap" onclick="toggleCol(\''+s+'\')" title="Collapse"></i></div><div class="kbody">'+inner+'</div><div class="kfoot"><button class="kaddbtn" onclick="addCard(\''+s+'\')"><i class="ti ti-plus"></i>Add candidate</button></div></div>';}).join('');};
+  var collapsed={},grp='none';
+  function ownerCol(o){return {'Aisha':'var(--purple)','Bob':'var(--blue)','Mei':'var(--teal)'}[o]||'var(--mut)';}
+  function kcard(c){return '<div class="kcard" draggable="true" data-id="'+c.id+'" tabindex="0" aria-label="'+c.name+', '+c.role+', '+c.stage+'. Arrow keys to move, Enter to open." onkeydown="cardKey(event,\''+c.id+'\')" ondragstart="dragStart(event,\''+c.id+'\')" ondragend="dragEnd(event)" onclick="openCand(\''+c.name+'\',\''+c.role+'\',\''+c.stage+'\',\''+c.col+'\')"><div class="kqa"><button title="Message" onclick="event.stopPropagation();qaMsg(\''+c.id+'\')"><i class="ti ti-brand-whatsapp"></i></button><button title="Schedule interview" onclick="event.stopPropagation();qaSched(\''+c.id+'\')"><i class="ti ti-calendar-plus"></i></button><button title="Log outcome" onclick="event.stopPropagation();qaOutcome(\''+c.id+'\')"><i class="ti ti-circle-check"></i></button></div><div style="display:flex;gap:9px;align-items:center"><div style="padding-right:78px;display:flex;gap:9px;align-items:center">'+avHTML(c.name,c.col,32)+'<div style="min-width:0"><div style="font-weight:600;font-size:13px">'+c.name+'</div><div class="dim" style="font-size:11px">'+c.role+'</div></div></div></div><div class="kmeta"><span class="dot" style="background:'+c.heatc+'"></span>'+c.heat+'<span style="margin-left:auto;display:flex;align-items:center;gap:7px">'+(c.wa?'<span style="color:var(--wa)"><i class="ti ti-brand-whatsapp"></i></span>':'')+'<span class="av" style="width:18px;height:18px;font-size:8px;background:'+ownerCol(c.owner)+';color:#fff" title="Owner: '+c.owner+'">'+c.owner[0]+'</span></span></div></div>';}
+  function colHTML(s,cards,withFoot){
+    if(collapsed[s]&&withFoot){return '<div class="kcol collapsed"><div class="kcolc" onclick="toggleCol(\''+s+'\')"><i class="ti ti-chevron-right kcap"></i><span class="dot" style="background:'+stageCol(s)+'"></span><span class="vert">'+s+'</span><span class="kcount">'+cards.length+'</span></div></div>';}
+    var cap=WIP[s];var cls=cap?(cards.length>cap?'over':(cards.length===cap?'warn':'')):'';
+    var avg=cards.length?Math.round(cards.reduce(function(a,c){return a+(c.days||0);},0)/cards.length):0;
+    var stat=cards.length?('avg '+avg+'d in stage'):'—';
+    var inner=cards.length?cards.map(kcard).join(''):'<div class="kempty">Drop a candidate here</div>';
+    var collapseBtn=withFoot?'<i class="ti ti-layout-sidebar-left-collapse kcap" onclick="toggleCol(\''+s+'\')" title="Collapse"></i>':'';
+    var foot=withFoot?'<div class="kfoot"><button class="kaddbtn" onclick="addCard(\''+s+'\')"><i class="ti ti-plus"></i>Add candidate</button></div>':'';
+    return '<div class="kcol'+(withFoot?'':' mini')+'" ondragover="dragOver(event,this)" ondragleave="dragLeave(event,this)" ondrop="boardDrop(event,\''+s+'\')"><div class="khead"><span class="dot" style="background:'+stageCol(s)+'"></span><span>'+s+'</span><span class="kcount '+cls+'" style="margin-left:auto">'+cards.length+(cap?' / '+cap:'')+'</span>'+collapseBtn+'</div><div class="kstat">'+stat+'</div><div class="kbody">'+inner+'</div>'+foot+'</div>';
+  }
+  function boardFilter(){var q=(document.getElementById('bsearch')?document.getElementById('bsearch').value:'').toLowerCase().trim();var of=document.getElementById('ownerf')?document.getElementById('ownerf').value:'all';return BOARD.filter(function(c){return (of==='all'||c.owner===of)&&(!q||c.name.toLowerCase().indexOf(q)>=0||c.role.toLowerCase().indexOf(q)>=0);});}
+  window.renderBoard=function(){var board=document.getElementById('board');var vis=boardFilter();var bc=document.getElementById('bcount');if(bc)bc.textContent=vis.length+' of '+BOARD.length+' shown';
+    if(grp==='none'){board.classList.remove('grouped');board.innerHTML=STAGES.map(function(s){return colHTML(s,vis.filter(function(c){return c.stage===s;}),true);}).join('');}
+    else{board.classList.add('grouped');var groups=[];vis.forEach(function(c){if(groups.indexOf(c[grp])<0)groups.push(c[grp]);});groups.sort();if(!groups.length)groups=['(none)'];board.innerHTML=groups.map(function(g){var gc=vis.filter(function(c){return c[grp]===g;});var cols=STAGES.map(function(s){return colHTML(s,gc.filter(function(c){return c.stage===s;}),false);}).join('');var ic=grp==='owner'?'ti-user':'ti-briefcase';var av=grp==='owner'?'<span class="av" style="width:22px;height:22px;font-size:9px;background:'+ownerCol(g)+';color:#fff">'+(g[0]||'?')+'</span>':'<i class="ti '+ic+' dim"></i>';return '<div class="swim"><div class="swimhead">'+av+g+'<span class="kcount" style="margin-left:0">'+gc.length+'</span></div><div class="binner">'+cols+'</div></div>';}).join('');}};
+  window.setGroup=function(g){grp=g;['none','owner','role'].forEach(function(x){var b=document.getElementById('grp-'+x);if(b)b.classList.toggle('on',x===g);});renderBoard();};
+  function placeCard(id,stage,idx){var ci=-1;for(var k=0;k<BOARD.length;k++){if(BOARD[k].id===id){ci=k;break;}}if(ci<0)return null;var c=BOARD[ci];var from=c.stage;BOARD.splice(ci,1);c.stage=stage;if(from!==stage){c.heat=(stage==='Placed'?'Placed':'just moved');c.heatc=(stage==='Placed'?'var(--green)':'var(--teal2)');c.days=0;}var sc=BOARD.filter(function(x){return x.stage===stage;});var g;if(idx>=sc.length){g=sc.length?BOARD.indexOf(sc[sc.length-1])+1:BOARD.length;}else{g=BOARD.indexOf(sc[idx]);}BOARD.splice(g,0,c);return {c:c,from:from};}
+  function announce(m){var l=document.getElementById('sr-live');if(l)l.textContent=m;}
   var dragId=null;
   function clearPH(){var p=document.getElementById('kplace');if(p)p.remove();}
   window.dragStart=function(e,id){dragId=id;e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',id);}catch(_){ }var t=e.currentTarget;setTimeout(function(){t.classList.add('dragging');},0);};
   window.dragEnd=function(e){var d=document.querySelector('.kcard.dragging');if(d)d.classList.remove('dragging');document.querySelectorAll('.kcol.drop').forEach(function(x){x.classList.remove('drop');});clearPH();dragId=null;};
   window.dragOver=function(e,col){e.preventDefault();e.dataTransfer.dropEffect='move';col.classList.add('drop');var body=col.querySelector('.kbody');if(!body)return;var cards=[].slice.call(body.querySelectorAll('.kcard:not(.dragging)'));var ph=document.getElementById('kplace');if(!ph){ph=document.createElement('div');ph.id='kplace';ph.className='kplace';}var idx=cards.length;for(var i=0;i<cards.length;i++){var r=cards[i].getBoundingClientRect();if(e.clientY<r.top+r.height/2){idx=i;break;}}if(idx>=cards.length)body.appendChild(ph);else body.insertBefore(ph,cards[idx]);};
   window.dragLeave=function(e,col){if(!col.contains(e.relatedTarget))col.classList.remove('drop');};
-  window.boardDrop=function(e,stage){e.preventDefault();var col=e.currentTarget;col.classList.remove('drop');var ph=document.getElementById('kplace');var idx=0;if(ph){var n=ph.previousElementSibling;while(n){if(n.classList&&n.classList.contains('kcard'))idx++;n=n.previousElementSibling;}}var id=dragId||(e.dataTransfer&&e.dataTransfer.getData('text/plain'));clearPH();var ci=-1;for(var k=0;k<BOARD.length;k++){if(BOARD[k].id===id){ci=k;break;}}if(ci<0){dragId=null;return;}var c=BOARD[ci];var from=c.stage;BOARD.splice(ci,1);c.stage=stage;if(from!==stage){c.heat=(stage==='Placed'?'Placed':'just moved');c.heatc=(stage==='Placed'?'var(--green)':'var(--teal2)');}var stageCards=BOARD.filter(function(x){return x.stage===stage;});var g;if(idx>=stageCards.length){g=stageCards.length?BOARD.indexOf(stageCards[stageCards.length-1])+1:BOARD.length;}else{g=BOARD.indexOf(stageCards[idx]);}BOARD.splice(g,0,c);renderBoard();toast(from!==stage?('Moved '+c.name.split(' ')[0]+': '+from+' → '+stage+' · capture triggered'):('Reordered '+c.name.split(' ')[0]+' in '+stage));dragId=null;};
+  window.boardDrop=function(e,stage){e.preventDefault();var col=e.currentTarget;col.classList.remove('drop');var ph=document.getElementById('kplace');var idx=0;if(ph){var n=ph.previousElementSibling;while(n){if(n.classList&&n.classList.contains('kcard'))idx++;n=n.previousElementSibling;}}var id=dragId||(e.dataTransfer&&e.dataTransfer.getData('text/plain'));clearPH();var r=placeCard(id,stage,idx);renderBoard();if(r)toast(r.from!==stage?('Moved '+r.c.name.split(' ')[0]+': '+r.from+' → '+stage+' · capture triggered'):('Reordered '+r.c.name.split(' ')[0]+' in '+stage));dragId=null;};
+  window.cardKey=function(e,id){var c=null;for(var k=0;k<BOARD.length;k++){if(BOARD[k].id===id){c=BOARD[k];break;}}if(!c)return;var si=STAGES.indexOf(c.stage);var sc=BOARD.filter(function(x){return x.stage===c.stage;});var ci=sc.indexOf(c);var ok=true;
+    if(e.key==='ArrowRight'&&si<STAGES.length-1){placeCard(id,STAGES[si+1],999);announce(c.name+' moved to '+STAGES[si+1]);}
+    else if(e.key==='ArrowLeft'&&si>0){placeCard(id,STAGES[si-1],999);announce(c.name+' moved to '+STAGES[si-1]);}
+    else if(e.key==='ArrowUp'&&ci>0){placeCard(id,c.stage,ci-1);announce(c.name+' moved up in '+c.stage);}
+    else if(e.key==='ArrowDown'&&ci<sc.length-1){placeCard(id,c.stage,ci+1);announce(c.name+' moved down in '+c.stage);}
+    else if(e.key==='Enter'){openCand(c.name,c.role,c.stage,c.col);return;}
+    else ok=false;
+    if(ok){e.preventDefault();renderBoard();var el=document.querySelector('.kcard[data-id="'+id+'"]');if(el)el.focus();}};
+  window.qaMsg=function(id){var c=BOARD.filter(function(x){return x.id===id;})[0];if(c)openThread(c.name,c.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase(),c.col);};
+  window.qaSched=function(id){var c=BOARD.filter(function(x){return x.id===id;})[0];toast('Interview scheduled for '+(c?c.name.split(' ')[0]:'candidate'));};
+  window.qaOutcome=function(id){toast('Outcome logged · capture rate updated');};
   window.toggleCol=function(s){collapsed[s]=!collapsed[s];renderBoard();};
   window.addCard=function(s){toast('Add to '+s+' — pick from Talent Pool or paste a CV');};
 
