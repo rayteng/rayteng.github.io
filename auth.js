@@ -53,6 +53,10 @@
     '#agGate .ag-input{width:100%;box-sizing:border-box;font-family:inherit;font-size:14px;border:1px solid #dfe2ea;border-radius:11px;padding:12px 14px;color:#1f2430;background:#fff}' +
     '#agGate .ag-input::placeholder{color:#aab0bd}' +
     '#agGate .ag-input:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.15)}' +
+    '#agGate .ag-inwrap{position:relative;display:flex}' +
+    '#agGate .ag-inwrap .ag-input{flex:1;padding-right:44px}' +
+    '#agGate .ag-eye{position:absolute;top:50%;right:6px;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border:none;background:transparent;color:#9aa1ac;cursor:pointer;border-radius:8px}' +
+    '#agGate .ag-eye:hover{color:#4f46e5;background:#f1f2f6}' +
     '#agGate .ag-btn{width:100%;margin-top:6px;border:none;cursor:pointer;background:#6366f1;color:#fff;font-family:inherit;font-size:15px;font-weight:600;border-radius:11px;padding:13px}' +
     '#agGate .ag-btn:hover{background:#4f46e5}' +
     '#agGate .ag-btn:disabled{opacity:.6;cursor:default}' +
@@ -64,6 +68,9 @@
   st.textContent = css;
   (doc.head || de).appendChild(st);
 
+  var EYE = '<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var EYE_OFF = '<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+
   var GATE_HTML =
     '<div class="ag-card">' +
       '<div class="ag-brand"><span class="ag-mark">●</span><span class="ag-logo">AJobThing</span><span class="ag-tag">Private preview</span></div>' +
@@ -72,7 +79,10 @@
       '<label class="ag-field"><span class="ag-lbl">Work email</span>' +
         '<input id="agEmail" class="ag-input" type="email" inputmode="email" placeholder="you@ajobthing.com" autocomplete="email" spellcheck="false"></label>' +
       '<label class="ag-field"><span class="ag-lbl">Access code</span>' +
-        '<input id="agCode" class="ag-input" type="password" placeholder="Team access code" autocomplete="off"></label>' +
+        '<div class="ag-inwrap">' +
+          '<input id="agCode" class="ag-input" type="password" placeholder="Team access code" autocomplete="off">' +
+          '<button id="agEye" class="ag-eye" type="button" tabindex="-1" aria-label="Show code" title="Show code">' + EYE + '</button>' +
+        '</div></label>' +
       '<button id="agBtn" class="ag-btn" type="button">Enter →</button>' +
       '<div id="agErr" class="ag-err" role="alert"></div>' +
       '<div class="ag-foot">Don’t have the code? Ask your AJobThing admin.</div>' +
@@ -98,11 +108,24 @@
     g.innerHTML = GATE_HTML;
     doc.body.appendChild(g);
 
+    var eye = $("agEye");
+    if (eye) {
+      eye.addEventListener("click", function () {
+        var inp = $("agCode");
+        var show = inp.type === "password";
+        inp.type = show ? "text" : "password";
+        eye.innerHTML = show ? EYE_OFF : EYE;
+        eye.setAttribute("aria-label", show ? "Hide code" : "Show code");
+        eye.setAttribute("title", show ? "Hide code" : "Show code");
+        inp.focus();
+      });
+    }
+
     function err(m) { $("agErr").textContent = m || ""; }
     function submit() {
       var email = ($("agEmail").value || "").trim(), code = $("agCode").value || "";
       err("");
-      if (!ALLOW_RE.test(email)) { err("Please sign in with your @ajobthing.com email."); $("agEmail").focus(); return; }
+      if (!ALLOW_RE.test(email)) { err("Please sign in with your @ajobthing.com email (check for typos)."); $("agEmail").focus(); return; }
       if (!code) { err("Enter the team access code."); $("agCode").focus(); return; }
       var b = $("agBtn"); b.disabled = true;
       sha256hex(code).then(function (h) {
