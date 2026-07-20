@@ -61,7 +61,10 @@
     '#agGate .ag-btn:hover{background:#4f46e5}' +
     '#agGate .ag-btn:disabled{opacity:.6;cursor:default}' +
     '#agGate .ag-err{min-height:18px;margin-top:11px;font-size:13px;color:#dc2626}' +
-    '#agGate .ag-foot{margin-top:15px;text-align:center;font-size:12px;color:#98a2b3}' +
+    '#agGate .ag-foot{margin-top:15px;text-align:center;font-size:12px;color:#98a2b3;line-height:1.6}' +
+    '#agGate .ag-foot b{color:#d7dee8}' +
+    '#agGate .ag-link{color:#5fa0ff;text-decoration:none;font-weight:600;white-space:nowrap}' +
+    '#agGate .ag-link:hover{text-decoration:underline}' +
     '@media(max-width:480px){#agGate .ag-card{padding:24px 20px 22px;border-radius:15px}#agGate .ag-title{font-size:19px}}';
   var st = doc.createElement("style");
   st.id = "agGateCss";
@@ -85,7 +88,7 @@
         '</div></label>' +
       '<button id="agBtn" class="ag-btn" type="button">Enter →</button>' +
       '<div id="agErr" class="ag-err" role="alert"></div>' +
-      '<div class="ag-foot">Don’t have the code? Ask your AJobThing admin.</div>' +
+      '<div class="ag-foot">Need the login password? Lark <b>Ray</b> or email <a class="ag-link" href="mailto:rayteng@ajobthing.com">rayteng@ajobthing.com</a></div>' +
     '</div>';
 
   function $(id) { return doc.getElementById(id); }
@@ -130,7 +133,7 @@
       var b = $("agBtn"); b.disabled = true;
       sha256hex(code).then(function (h) {
         if (h !== CODE_HASH) {
-          err("That access code isn’t right. Ask your AJobThing admin.");
+          err("That access code isn’t right. Lark Ray or email rayteng@ajobthing.com for the password.");
           b.disabled = false; $("agCode").focus(); $("agCode").select(); return;
         }
         try { localStorage.setItem(AUTH_KEY, email); } catch (e) {}
